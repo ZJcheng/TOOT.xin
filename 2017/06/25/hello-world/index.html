@@ -6,12 +6,12 @@
 
 
 <!doctype html>
-<html lang="">
+<html lang="zh-cn">
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <meta name="author" content="John Doe">
+  <meta name="author" content="You Th">
   
   
   
@@ -19,7 +19,7 @@
     <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
 Qu...">
   
-  <title>Hello World [ Hexo ]</title>
+  <title>Hello World [ 放肆青春 ]</title>
   
   
     <link rel="shortcut icon" href="/favicon.ico">
@@ -47,8 +47,8 @@ Qu...">
       <div id="brand">
         
         <a onClick="openUserCard()">
-          <img id="avatar" src="http://7te9fe.com1.z0.glb.clouddn.com/default_avatar.jpg"/>
-          <div id="homelink">Hexo</div>
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
         </a>
       </div>
       <div id="menu-list">
@@ -58,42 +58,21 @@ Qu...">
           
             <li>
           
-            <a href="/index.html">Home</a>
+            <a href="/index.html">首页</a>
             
           </li>
         
           
             <li>
           
-            <a href="/archives">Archives</a>
+            <a href="/archives">文章</a>
             
           </li>
         
           
             <li>
           
-            <a href="/tags">Tags</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/categories">Categories</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="/about">About</a>
-            
-          </li>
-        
-          
-            <li>
-          
-            <a href="https://github.com/stiekel/hexo-theme-random">Github</a>
+            <a href="/categories">分类</a>
             
           </li>
         
@@ -112,9 +91,9 @@ Qu...">
   <article id="post">
     <h1>Hello World</h1>
     <p class="page-title-sub">
-      <span id = "post-title-date">撰写于 2017-06-25</span>
+      <span id = "post-title-date">Created at 2017-06-24</span>
       
-        <span id = "post-title-updated">修改于 2017-06-25</span>
+        <span id = "post-title-updated">Updated at 2017-06-24</span>
       
       
       
@@ -132,10 +111,10 @@ Qu...">
 
   </article>
   <div class="random-toc-area">
-  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
-  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">Show TOC</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">Hide TOC</button>
   <div class="random-toc">
-    <h2>目录</h2>
+    <h2>Table of Content</h2>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
   </div>
 </div>
@@ -161,7 +140,7 @@ Qu...">
 
   <div id="bottom-outer">
     <div id="bottom-inner">
-      Site by John Doe using
+      Site by You Th using
       <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
       <br>
       
@@ -174,13 +153,13 @@ Qu...">
 
 <div id="user-card">
   <div class="center-field">
-    <img class="avatar" src="http://7te9fe.com1.z0.glb.clouddn.com/default_avatar.jpg">
-    <p id="description"></p>
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
     <ul class="social-icon">
   
   
     <li>
-      <a href="https://github.com/stiekel/hexo-theme-random">
+      <a href="https://github.com/ZJcheng">
         
           <i class="icon iconfont github">&#xe606;</i>
         
@@ -188,33 +167,9 @@ Qu...">
     </li>
   
     <li>
-      <a href="https://coding.net/u/Stiekel">
-        
-          <i class="icon iconfont coding">&#xe607;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="https://twitter.com/SidCN">
-        
-          <i class="icon iconfont twitter">&#xe600;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="http://weibo.com/sidcn">
+      <a href="http://weibo.com/u/6107250655">
         
           <i class="icon iconfont weibo">&#xe602;</i>
-        
-      </a>
-    </li>
-  
-    <li>
-      <a href="http://www.douban.com/people/Stiekel/">
-        
-          <i class="icon iconfont douban">&#xe60f;</i>
         
       </a>
     </li>
@@ -266,6 +221,20 @@ var isTriggerAnalytics = !( true && isIgnoreHost );
 
   // fancybox
   var backgroundImages = [];
+  
+    
+      backgroundImages.push('/tu/1.jpg');
+    
+      backgroundImages.push('/tu/2.jpg');
+    
+      backgroundImages.push('/tu/3.jpg');
+    
+      backgroundImages.push('/tu/4.jpg');
+    
+      backgroundImages.push('/tu/5.jpg');
+    
+      backgroundImages.push('/tu/6.jpg');
+    
   
   $('#post').each(function(i){
     $(this).find('img').each(function(){
