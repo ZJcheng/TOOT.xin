@@ -335,16 +335,18 @@ var jiathis_config = {data_track_clickback:'true'};
 </div>
 
 
-  if theme.comments.yungentie
-  div(class="cloud-tie-wrapper",id="cloud-tie-wrapper")
-  script(src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js")
-  script.
-      var cloudTieConfig = {
-          url: document.location.href,
-          sourceId: "",
-          productKey: "#{config.uyan_id || theme.uyan_id}",
-          target: "cloud-tie-wrapper"
-      };
+  <!-- UY BEGIN -->
+<script>
+div(class="cloud-tie-wrapper",id="cloud-tie-wrapper")
+script(src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js")
+script.
+var cloudTieConfig = {
+url: document.location.href,
+sourceId: "",
+src="productKey:=e78d8b0e6f964465a0627be6c0cd05df",
+target: "cloud-tie-wrapper"
+</script>
+<!-- UY END -->
 
 
 <div id="user-card">
