@@ -155,10 +155,16 @@ var jiathis_config = {data_track_clickback:'true'};
 </div>
 
 
-  <!-- UY BEGIN -->
-<div id="uyan_frame"></div>
-<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
-<!-- UY END -->
+  if theme.comments.yungentie
+  div(class="cloud-tie-wrapper",id="cloud-tie-wrapper")
+  script(src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js")
+  script.
+      var cloudTieConfig = {
+          url: document.location.href,
+          sourceId: "",
+          productKey: "#{config.uyan_id || theme.uyan_id}",
+          target: "cloud-tie-wrapper"
+      };
 
 
 <div id="user-card">
