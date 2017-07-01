@@ -1,0 +1,505 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="You Th">
+  
+  
+  
+  
+    <meta name="description" content="DNS原理及其解析过程DNS 搭建本机环境:CentOS
+RPM包:yum -y install bind
+主配置文件位置:/etc/named.conf
+区域配置文件位置:vim/etc/named.rfc1912.zones
+数据文件位置：cd /var/named/
+正反向解析模板文件：/var/named/named.localhost   反：named.loopback
+缓存位置...">
+  
+  <title>DNS [ 放肆青春 ]</title>
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
+  
+  
+    <div class="item next">
+      <a href="/2017/06/26/DHCP/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        DHCP
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/简历">简历</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  <article id="post">
+    <h1>DNS</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-06-30</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-01</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/服务/">服务</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=338870&auto=0&height=66"></iframe><br></center>
+
+<h1 id="DNS原理及其解析过程"><a href="#DNS原理及其解析过程" class="headerlink" title="DNS原理及其解析过程"></a><a href="https://michaelyou.github.io/2015/03/19/DNS%E5%8E%9F%E7%90%86%E5%8F%8A%E5%85%B6%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B/" target="_blank" rel="external">DNS原理及其解析过程</a></h1><h1 id="DNS-搭建"><a href="#DNS-搭建" class="headerlink" title="DNS 搭建"></a>DNS 搭建</h1><p>本机环境:CentOS</p>
+<p>RPM包:yum -y install <strong>bind</strong></p>
+<p>主配置文件位置:/etc/named.conf</p>
+<p>区域配置文件位置:vim/etc/named.rfc1912.zones</p>
+<p>数据文件位置：cd /var/named/</p>
+<p>正反向解析模板文件：/var/named/named.localhost   反：named.loopback</p>
+<p>缓存位置：/var/named/data/cache_dump.db</p>
+<p>根域文件位置：/var/named/named.ca</p>
+<p>加密文件位置：/etc/named.root.key</p>
+<h1 id="DNS-实验：-基本服务，正反解析"><a href="#DNS-实验：-基本服务，正反解析" class="headerlink" title="DNS 实验：    基本服务，正反解析"></a>DNS 实验：    基本服务，正反解析</h1><pre><code>配置主配置文件：vim /etc/named.conf
+</code></pre><p><img src="http://i1.buimg.com/598678/bbbb66134d4f9c66.jpg" alt=""><br><img src="http://i1.buimg.com/598678/ffcbc2420138cee1.jpg" alt=""></p>
+<pre><code>配置区域配置文件:vim /etc/named.rfc1912.zones
+</code></pre><p><img src="http://i1.buimg.com/598678/492982cc55cf6be2.jpg" alt=""></p>
+<pre><code>配置正向解析: vim named.localhost
+</code></pre><p><img src="http://i1.buimg.com/598678/9ab377f1ef5ae458.jpg" alt=""></p>
+<pre><code>配置方向解析:vim named.empty
+</code></pre><p><img src="http://i1.buimg.com/598678/e71719f589c74d6c.jpg" alt=""></p>
+<pre><code>启动服务：systemctl start named  或：service named start
+</code></pre><hr>
+<pre><code>客户机配置自己的DNS，更改为：
+</code></pre><blockquote>
+<p>   DEVICE=eth0<br>   ONBOOT=yes<br>   BOOTPROTO=static<br>   IPADDR=129.168.10.10<br>   NETMASK=255.255.255.0<br>   DNS1=192.168.10.2</p>
+</blockquote>
+<pre><code>重启网卡：service  network restart
+</code></pre><hr>
+<pre><code>测试正向解析：
+</code></pre><blockquote>
+<p>   [root@Zcheng1 ~]# nslookup<br>   www.taobao.com<br>   Server:        192.168.10.2 #DNS服务器地址<br>   Address:    192.168.10.2#53</p>
+<p>   Name:    www.taobao.com    #解析效果<br>   Address: 192.168.10.3</p>
+</blockquote>
+<pre><code>测试反向解析：
+</code></pre><blockquote>
+<p>   [root@Zcheng1 ~]# nslookup<br>   192.168.10.3<br>   Server:        192.168.10.2<br>   Address:    192.168.10.2#53<br>   3.10.168.192.in-addr.arpa    name = www.taobao.com.</p>
+</blockquote>
+<h1 id="DNS-实验：-DNS主从解析"><a href="#DNS-实验：-DNS主从解析" class="headerlink" title="DNS 实验： DNS主从解析"></a>DNS 实验： DNS主从解析</h1><p>在主服务器主配置文件添加：在 options {内添加:allow-transfer {从服务器IP; };</p>
+<p>主服务器已经有了，现在搭建从服务器，</p>
+<p>从服务器安装DNS：yum -y install bind</p>
+<p>从服务器主配置文件和主的一样，不变。</p>
+<pre><code>从服务器配置区域文件：vim /etc/named.rfc1912.zones
+</code></pre><p><img src="http://i4.piimg.com/598678/7eeca64777226e0f.png" alt="">    </p>
+<pre><code>从服务器启动服务：service  named start
+</code></pre><p>客户端配置DNS，把DNS指向从服务器。</p>
+<p>测试主从解析，正反向解析：</p>
+<blockquote>
+<p>[root@Zcheng2 ~]# nslookup<br>www.taobao.com<br>Server:        192.168.10.10<br>Address:    192.168.10.10#53</p>
+<p>Name:    www.taobao.com<br>Address: 192.168.10.3</p>
+<p>[root@Zcheng2 ~]# nslookup<br>192.168.10.10<br>Server:        192.168.10.10<br>Address:    192.168.10.10#53</p>
+<p>192.168.10.10.in-addr.arpa    name = dns.taobao.com.</p>
+</blockquote>
+<h1 id="DNS-实验-DNS分离解析"><a href="#DNS-实验-DNS分离解析" class="headerlink" title="DNS 实验    DNS分离解析"></a>DNS 实验    <strong>DNS分离解析</strong></h1><pre><code>DNS服务器准备两张网卡，不同网段。
+</code></pre><blockquote>
+<p>   [root@Centos-7 ~]# ifconfig<br>   eth0: flags=4163<up,broadcast,running,multicast>  mtu 1500<br>   inet 66.66.66.66  netmask 255.255.255.0  broadcast 66.66.66.255<br>   eth1: flags=4163<up,broadcast,running,multicast>  mtu 1500<br>   inet 88.88.88.88  netmask 255.255.255.0  broadcast 88.88.88.255</up,broadcast,running,multicast></up,broadcast,running,multicast></p>
+</blockquote>
+<p>就不配置反向解析了，太麻烦。</p>
+<p>配置DNS服务器主配置文件：vim/etc/named.conf</p>
+<p>把这行注释了： #include “/etc/named.rfc1912.zones”;</p>
+<p><img src="http://i2.kiimg.com/598678/3f970d0bd7854754.png" alt=""></p>
+<pre><code>注意:如果上面有根区域，要删除。否则会报错.
+</code></pre><hr>
+<pre><code>拷贝默认的区域配置文件“named.rfc1912.zones”改名为内网和外网的区域配置文件
+</code></pre><hr>
+<ul>
+<li><p>cp -a /etc/named.rfc1912.zones /etc/nei</p>
+</li>
+<li><p>cp -a /etc/named.rfc1912.zones /etc/wai</p>
+</li>
+</ul>
+<hr>
+<pre><code>配置内网区域文件：vim /etc/nei 
+</code></pre><blockquote>
+<p>zone “toot.xin” IN { #解析的域名<br>    type master;<br>    file “nei.zheng”; #数据文件名，改名了，需要自己创建。<br>    alow-update { none; };<br>};</p>
+</blockquote>
+<pre><code>配置外网区域文件：vim/etc/wai
+</code></pre><blockquote>
+<p>zone “toot.xin” IN {<br>    type master;<br>    file “wai.zheng”;<br>    allow-update { none; };<br>};</p>
+</blockquote>
+<pre><code>配置内网数据文件：cd /var/named/
+</code></pre><p>因为改名了，需要拷贝：</p>
+<ul>
+<li><p>cp /var/named/named.localhost /var/named/nei.zheng     </p>
+</li>
+<li><p>cp /var/named/named.localhost /var/named/nei.zheng</p>
+<p>配置内网数据文件：vim nei.zheng<br><img src="http://i2.kiimg.com/598678/34b6dca5e189e244.png" alt=""></p>
+<p>配置外网数据文件：vim wai.zheng<br><img src="http://i2.kiimg.com/598678/a186f70e58600908.png" alt=""></p>
+<p>启动服务：systemctl  start named</p>
+</li>
+</ul>
+<hr>
+<pre><code>内网测试：nslookup  www.toot.xin
+</code></pre><blockquote>
+<p>   [root@Zcheng1 ~]# nslookup www.toot.xin<br>    Server:        66.66.66.66<br>   Address:    66.66.66.66#53</p>
+<p>   Name:    www.toot.xin<br>   Address: 66.66.66.10</p>
+<p>   [root@Zcheng1 ~]# ifconfig<br>    eth0      Link encap:Ethernet  HWaddr 00:0C:29:3D:D8:<br>   inet addr:66.66.66.10  Bcast:66.66.66.255  Mask:255.255.255.0</p>
+</blockquote>
+<pre><code>外网测试：nslookup  www.toot.xin
+</code></pre><blockquote>
+<p>   [root@Zcheng2 ~]# nslookup  www.toot.xin</p>
+<p>   Server:        88.88.88.88    Address:    88.88.88.88#53<br>    Name:    www.toot.xin<br>    Address: 88.88.88.10<br>    [root@Zcheng2 ~]# ifconfig<br>    eth0      Link encap:Ethernet  HWaddr 00:0C:29:FA:57:<br>   inet addr:88.88.88.10  Bcast:88.88.88.255  Mask:255.255.255.0</p>
+</blockquote>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS原理及其解析过程"><span class="toc-text">DNS原理及其解析过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-搭建"><span class="toc-text">DNS 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验：-基本服务，正反解析"><span class="toc-text">DNS 实验：    基本服务，正反解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验：-DNS主从解析"><span class="toc-text">DNS 实验： DNS主从解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验-DNS分离解析"><span class="toc-text">DNS 实验    DNS分离解析</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+
+  
+
+  
+    <a href="/2017/06/26/DHCP/" class="next">下一篇 DHCP &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by You Th using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/ZJcheng">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://weibo.com/u/6107250655">
+        
+          <i class="icon iconfont weibo">&#xe602;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+  <script>
+if(isTriggerAnalytics) {
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f15832fa2beb10725843b2702cf82399";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+}
+</script>
+
+
+
+  <script>
+if(isTriggerAnalytics) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101736855-1', 'auto');
+  ga('send', 'pageview');
+}
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/1c43953b79ab5bf0.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/e33029ff65cf5e2d.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/dcda941b49b24c38.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/883c8771706e9f47.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/58ade17c03935b32.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b1f7b1d418d0f8ba.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b47ba41371028de2.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/4e375f9893109b4f.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/13e3984276c67ab8.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/ca1f9761784b661e.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/20cafbbf15da2467.jpg');
+    
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["slideLeft2","slideRight2","flash2"],"timer":true,"delay":5000,"shuffle":true,"count":28};
+var unsplashConfig = {"gravity":"north"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+  turnoffBackgroundImage = true;
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
+

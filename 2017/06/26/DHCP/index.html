@@ -53,6 +53,15 @@ DHCP端口: IPV4 udp:6...">
 <body>
 <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2017/06/30/DNS/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        DNS
+      </div>
+    </div>
+  
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -108,7 +117,7 @@ DHCP端口: IPV4 udp:6...">
     <p class="page-title-sub">
       <span id = "post-title-date">撰写于 2017-06-25</span>
       
-        <span id = "post-title-updated">修改于 2017-06-29</span>
+        <span id = "post-title-updated">修改于 2017-06-30</span>
       
       
       <span id = "post-title-categories">分类
@@ -148,7 +157,7 @@ DHCP端口: IPV4 udp:6...">
 </li>
 </ul>
 <p><a href="http://support.huawei.com/ehedex/pages/DOC1000065885DZD0429D/05/DOC1000065885DZD0429D/05/resources/ag_cn/sec_eudemon_ag_network_0065.html" target="_blank" rel="external">DHCP原理</a></p>
-<h2 id="DHCP搭建"><a href="#DHCP搭建" class="headerlink" title="DHCP搭建:"></a>DHCP搭建:</h2><ul>
+<h1 id="DHCP搭建"><a href="#DHCP搭建" class="headerlink" title="DHCP搭建:"></a>DHCP搭建:</h1><ul>
 <li>本机环境: CentOS 7  </li>
 <li>RPM包:yum -y install dhcp</li>
 <li>DHCP端口: IPV4 udp:67(接受端口) udp:68(发送端口)<ul>
@@ -160,11 +169,8 @@ DHCP端口: IPV4 udp:6...">
 <li><p>配置文件模板位置:/usr/share/doc/dhcp-4.2.5/dhcpd.conf.example</p>
 </li>
 </ul>
-<ul>
-<li><p>DHCP 实验:    基本服务</p>
-</li>
-<li><p>vim /etc/dhcp/dhcpd.conf</p>
-</li>
+<h1 id="DHCP-实验-基本服务"><a href="#DHCP-实验-基本服务" class="headerlink" title="DHCP 实验:    基本服务"></a>DHCP 实验:    基本服务</h1><ul>
+<li>vim /etc/dhcp/dhcpd.conf</li>
 <li><p>配置:</p>
 <blockquote>
 <p>subnet 66.66.66.0 netmask 255.255.255.0 { #分配网段区域<br> range 66.66.66.100 66.66.66.244;      #分配的IP范围<br> option domain-name-servers 114.114.114.114;   #DNS地址<br> option domain-name “internal.example.org”;    #DNS服务器<br> option routers 66.66.66.2;                    #网关<br> option broadcast-address 10.5.5.31;           #广播地址<br> default-lease-time 600;                       #默认租约时间<br> max-lease-time 7200;                          #最大租约<br>}<br>#把没用的删除！    </p>
@@ -188,10 +194,9 @@ DHCP端口: IPV4 udp:6...">
 <li><p>基本的DHCP服务器就实现了.</p>
 </li>
 </ul>
-<ul>
-<li>DHCP 实验:     地址保留  #有些设备是需要固定的IP.</li>
-</ul>
-<ul>
+<h1 id="DHCP-实验-地址保留"><a href="#DHCP-实验-地址保留" class="headerlink" title="DHCP 实验:     地址保留"></a>DHCP 实验:     地址保留</h1><ul>
+<li><p>有些设备是需要固定的IP</p>
+</li>
 <li><p>cp /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example /etc/dhcp/dhcpd.conf  #覆盖配置文件改为:</p>
 </li>
 <li><p>vim /etc/dhcp/dhcpd.conf</p>
@@ -215,9 +220,7 @@ DHCP端口: IPV4 udp:6...">
 <blockquote>
 <p>   service  network restart<br>   [root@Zcheng1 ~]# ifconfig<br>   eth0      Link encap:Ethernet  HWaddr 00:0C:29:3D:D8:5s<br>              inet addr:66.66.66.111  Bcast:10.5.5.31  Mask:255.255.255.0</p>
 </blockquote>
-<ul>
-<li><p>DHCP 实验:    同网段划分不同网段的IP.</p>
-</li>
+<h1 id="DHCP-实验-同网段划分不同网段的IP"><a href="#DHCP-实验-同网段划分不同网段的IP" class="headerlink" title="DHCP 实验:    同网段划分不同网段的IP."></a>DHCP 实验:    同网段划分不同网段的IP.</h1><ul>
 <li><p>cp /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example /etc/dhcp/dhcpd.conf #覆盖配置文件修改:</p>
 </li>
 <li><p>vim /etc/dhcp/dhcpd.conf</p>
@@ -241,8 +244,7 @@ DHCP端口: IPV4 udp:6...">
 <blockquote>
 <p>   service  network restart<br>   [root@Zcheng2 ~]# ifconfig<br>   eth0      Link encap:Ethernet  HWaddr 00:0C:29:FA:57:F3<br>               inet addr:77.77.77.100  Bcast:77.77.77.255  Mask:255.255.255.0</p>
 </blockquote>
-<ul>
-<li>DHCP 实验:  DHCP 中继服务器<ul>
+<h1 id="DHCP-实验-DHCP-中继服务器"><a href="#DHCP-实验-DHCP-中继服务器" class="headerlink" title="DHCP 实验:  DHCP 中继服务器"></a>DHCP 实验:  DHCP 中继服务器</h1><ul>
 <li>中继服务安装:yum  –y  install  dhcrelay</li>
 <li>配置文件位置:/etc/sysconfig/dhcrelay</li>
 <li>Centos-7 没有/etc/sysconfig/dhcrelay  这个文件. 我就换成了Centos-6了.</li>
@@ -250,8 +252,6 @@ DHCP端口: IPV4 udp:6...">
 <li>配置中继服务器的两张网卡,第一张网卡IP是:66. . . 66  第二张网卡IP是:88. . .88<blockquote>
 <p>   [root@Centos-7]# ifconfig<br>   eth0: flags=4163<up,broadcast,running,multicast>  mtu 1500<br>   inet 66.66.66.66  netmask 255.255.255.0  broadcast 66.66.66.255</up,broadcast,running,multicast></p>
 </blockquote>
-</li>
-</ul>
 </li>
 </ul>
 <blockquote>
@@ -285,12 +285,14 @@ DHCP端口: IPV4 udp:6...">
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP作用"><span class="toc-text">DHCP作用:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DHCP搭建"><span class="toc-text">DHCP搭建:</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP作用"><span class="toc-text">DHCP作用:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP搭建"><span class="toc-text">DHCP搭建:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP-实验-基本服务"><span class="toc-text">DHCP 实验:    基本服务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP-实验-地址保留"><span class="toc-text">DHCP 实验:     地址保留</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP-实验-同网段划分不同网段的IP"><span class="toc-text">DHCP 实验:    同网段划分不同网段的IP.</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DHCP-实验-DHCP-中继服务器"><span class="toc-text">DHCP 实验:  DHCP 中继服务器</span></a></li></ol>
   </div>
 </div>
 
   
 <nav id="pagination">
+  
+    <a href="/2017/06/30/DNS/" class="prev">&larr; 上一篇 DNS</a>
   
 
   
@@ -336,15 +338,10 @@ var jiathis_config = {data_track_clickback:'true'};
 </div>
 
 
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: document.location.href, 
-    sourceId: "",
-    productKey: "e78d8b0e6f964465a0627be6c0cd05df",
-    target: "cloud-tie-wrapper"
-  };
-</script>
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
 
 
 <div id="user-card">
