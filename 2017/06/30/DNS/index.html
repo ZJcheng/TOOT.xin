@@ -233,6 +233,17 @@ RPM包:yum -y install bind
 <p>   [root@Zcheng2 ~]# nslookup  www.toot.xin</p>
 <p>   Server:        88.88.88.88    Address:    88.88.88.88#53<br>    Name:    www.toot.xin<br>    Address: 88.88.88.10<br>    [root@Zcheng2 ~]# ifconfig<br>    eth0      Link encap:Ethernet  HWaddr 00:0C:29:FA:57:<br>   inet addr:88.88.88.10  Bcast:88.88.88.255  Mask:255.255.255.0</p>
 </blockquote>
+<h1 id="DNS-实验-DNS缓存服务器"><a href="#DNS-实验-DNS缓存服务器" class="headerlink" title="DNS 实验:DNS缓存服务器"></a>DNS 实验:DNS缓存服务器</h1><p>RPM包:yum -y install dnsmasq</p>
+<p>DNS缓存的主配置文件：vim /etc/dnsmasq.conf</p>
+<ul>
+<li><p>只需更改：domain        设置当前的域：</p>
+<ul>
+<li>server        设置当前的DNS服务器网络地址</li>
+<li>cache-size    设置缓存大小。</li>
+</ul>
+<p>启动服务：/etc/init.d/dnsmasq start<br>测试命令：dig  域名</p>
+</li>
+</ul>
 
   </article>
   <div class="random-toc-area">
@@ -240,7 +251,7 @@ RPM包:yum -y install bind
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS原理及其解析过程"><span class="toc-text">DNS原理及其解析过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-搭建"><span class="toc-text">DNS 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验：-基本服务，正反解析"><span class="toc-text">DNS 实验：    基本服务，正反解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验：-DNS主从解析"><span class="toc-text">DNS 实验： DNS主从解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验-DNS分离解析"><span class="toc-text">DNS 实验    DNS分离解析</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS原理及其解析过程"><span class="toc-text">DNS原理及其解析过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-搭建"><span class="toc-text">DNS 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验：-基本服务，正反解析"><span class="toc-text">DNS 实验：    基本服务，正反解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验：-DNS主从解析"><span class="toc-text">DNS 实验： DNS主从解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验-DNS分离解析"><span class="toc-text">DNS 实验    DNS分离解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS-实验-DNS缓存服务器"><span class="toc-text">DNS 实验:DNS缓存服务器</span></a></li></ol>
   </div>
 </div>
 
