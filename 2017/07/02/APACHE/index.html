@@ -152,10 +152,90 @@ APACHE 搭建本机环境：CentOS
 <li>cp -r /root/apr-util-1.4.1 /root/httpd-2.4.7/srclib/apr-util</li>
 </ul>
 <p>cd  /root/httpd-2.4.7/</p>
-<p>安装：[root@Centos-7 httpd-2.4.7]# ./configure –prefix=/usr/local/apache2  –sysconfdir=/usr/local/apache2/etc/ –enable-rewrite –enable-so –enable-headers –enable-expires –with-mpm=worker –enable-modules=most –enable-deflate  –enable-ssl </p>
+<p>安装：[root@Centos-7 httpd-2.4.7]#./configure –prefix=/usr/local/apache2  –sysconfdir=/usr/local/apache2/etc/ –enable-rewrite –enable-so –enable-headers –enable-expires –with-mpm=worker –enable-modules=most –enable-deflate  –enable-ssl </p>
 <p>指定安装位置：./configure –prefix=/usr/local/apache2/ </p>
 <p>指定配置文件位置：–sysconfdir=/usr/local/apache2/etc/</p>
 <p>编译: make &amp;&amp; make install</p>
+<h1 id="APACHE-实验：-身份验证-密码验证"><a href="#APACHE-实验：-身份验证-密码验证" class="headerlink" title="APACHE 实验：    身份验证-密码验证"></a>APACHE 实验：    身份验证-密码验证</h1><pre><code>配备配置文件：cp -a /usr/local/apache2/etc/httpd.conf /usr/local/apache2/etc/httpd.conf~
+</code></pre><hr>
+<pre><code>在 /usr/local/apache2/htdocs 目录下创建文件 .htaccess
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/1.png" alt=""><br>    添加用户，与系统用户无关</p>
+<blockquote>
+<p>   /usr/local/apache2/bin/htpasswd -c /usr/local/apache2/htdocs/a.psd zhangsan<br>   /usr/local/apache2/bin/htpasswd -m /usr/local/apache2/htdocs/a.psd lisi<br>说明： -c 创建密码文件，只添加第一个用户时使用 -m 创建密码文件，不限次数<br>    开启选项：vim /usr/local/apache2/etc/httpd.conf<br>   AllowOverride All<br>    启动服务测试:/usr/local/apache2/bin/apachectl start<br><img src="http://os3vxur5n.bkt.clouddn.com/2.png" alt=""></p>
+</blockquote>
+<h1 id="APACHE-实验：-身份验证-客户端验证"><a href="#APACHE-实验：-身份验证-客户端验证" class="headerlink" title="APACHE 实验：    身份验证-客户端验证"></a>APACHE 实验：    身份验证-客户端验证</h1><pre><code>配置：vim /usr/local/apache2/etc/httpd.conf
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/33.png" alt=""><br>    测试：# elinks 66.66.66.66<br><img src="http://os3vxur5n.bkt.clouddn.com/4.png" alt=""></p>
+<h1 id="APACHE-实验：-目录别名"><a href="#APACHE-实验：-目录别名" class="headerlink" title="APACHE 实验：    目录别名"></a>APACHE 实验：    目录别名</h1><hr>
+<pre><code>修改主配置文件:vim /usr/local/apache2/etc/httpd.conf
+</code></pre><p>添加：alias “/a” “/usr/local/apache2/htdocs/a/b/c/d”</p>
+<p>含义：将访问路径由 <a href="http://IP" target="_blank" rel="external">http://IP</a> 地址 /a/b/c/d  简化为 <a href="http://IP" target="_blank" rel="external">http://IP</a> 地址 /a</p>
+<h1 id="APACHE-实验：-虚拟主机"><a href="#APACHE-实验：-虚拟主机" class="headerlink" title="APACHE 实验：     虚拟主机"></a>APACHE 实验：     虚拟主机</h1><hr>
+<h2 id="基于IP的虚拟主机"><a href="#基于IP的虚拟主机" class="headerlink" title="基于IP的虚拟主机"></a>基于IP的虚拟主机</h2><hr>
+<pre><code>在 eth0 网卡上添加一个子接口 eth0:0
+</code></pre><p>ifconfig eth0:0 xxx.xxx.xxx.xxx/xx</p>
+<pre><code>开启主配置文件中的虚拟主机选项(取消注释)
+</code></pre><p>LoadModule vhost_alias_module modules/mod_vhost_alias.so</p>
+<p>Include etc//extra/httpd-vhosts.conf</p>
+<pre><code>修改虚拟机配置文件添加虚拟主机
+</code></pre><p>vim /usr/local/apache2/etc/extra/httpd-vhosts.conf<br><img src="http://os3vxur5n.bkt.clouddn.com/5.png" alt=""></p>
+<blockquote>
+<p>   mkdir /usr/local/apache2/htdocs/aa<br>   mkdir /usr/local/apache2/htdocs/bb<br>   vim /usr/local/apache2/htdocs/aa/index.html<br>   vim /usr/local/apache2/htdocs/bb/index.html<br><img src="http://os3vxur5n.bkt.clouddn.com/6.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/7.png" alt=""></p>
+</blockquote>
+<h2 id="基于端口的虚拟主机"><a href="#基于端口的虚拟主机" class="headerlink" title="基于端口的虚拟主机"></a>基于端口的虚拟主机</h2><pre><code>vim /usr/local/apache2/etc/extra/httpd-vhosts.conf
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/8.png" alt=""></p>
+<h2 id="基于域名的虚拟主机"><a href="#基于域名的虚拟主机" class="headerlink" title="基于域名的虚拟主机"></a>基于域名的虚拟主机</h2><pre><code>vim /usr/local/apache2/etc/extra/httpd-vhosts.conf
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/9.png" alt=""></p>
+<h1 id="APACHE-实验：-个人主页"><a href="#APACHE-实验：-个人主页" class="headerlink" title="APACHE 实验：    个人主页"></a>APACHE 实验：    个人主页</h1><ul>
+<li><p>开启模块：</p>
+<blockquote>
+<p>   取消注释 LoadModule userdir_module modules/mod_userdir.so 模块<br>   取消注释 Include etc//extra/httpd-userdir.conf 注释文件</p>
+</blockquote>
+</li>
+<li><p>创建用户：useradd toot  passwd 123</p>
+</li>
+<li>进入用户目录创建：<blockquote>
+<p>   cd /home/toot<br>   mkdir public_html<br>   vim index.html<br>   给 public_html 家目录 网页文件 赋予执行权限</p>
+</blockquote>
+</li>
+</ul>
+<p>通过浏览器访问进行测试，访问链接为： <a href="http://0.0.0.0/~toot/" target="_blank" rel="external">http://0.0.0.0/~toot/</a></p>
+<h1 id="APACHE-实验：-地址跳转"><a href="#APACHE-实验：-地址跳转" class="headerlink" title="APACHE 实验：    地址跳转"></a>APACHE 实验：    地址跳转</h1><pre><code>vim /usr/local/apache2/etc/httpd.conf
+</code></pre><p>开启模块 LoadModule vhost_alias_module modules/mod_vhost_alias.so  开启虚拟主机<br>开启模块 LoadModule rewrite_module modules/mod_rewrite.so 开启网页重写模块<br>加载模块 Include conf/extra/httpd-vhosts.conf</p>
+<pre><code>vim /usr/local/apache2/etc/extra/httpd-vhosts.conf
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/10.png" alt=""></p>
+<pre><code>cd /usr/local/apache2/htdocs/aa/ 
+</code></pre><blockquote>
+<p>   vim .htaccess<br>   rewriteengine on<br>   rewritecond %{HTTP_HOST} www.toot.xin<br>   rewriterule .*    <a href="http://www.otto.xin" target="_blank" rel="external">http://www.otto.xin</a></p>
+</blockquote>
+<h1 id="APACHE-实验：-HTTPS加密"><a href="#APACHE-实验：-HTTPS加密" class="headerlink" title="APACHE 实验：    HTTPS加密"></a>APACHE 实验：    HTTPS加密</h1><pre><code>安装：yum -y install openssl openssl-devel
+</code></pre><blockquote>
+<p>   openssl genrsa -des3 -out server.key 1024  ：生成密钥<br>   openssl req -new -key server.key -out server.csr  ：生成csr 认证文件<br>openssl x509 -req -days 365 -sha256 -in server.csr -signkey server.key -out server.crt    自己认证命令<br>   cp server.key /usr/local/apache2/etc/<br>   cp server.crt /usr/local/apache2/etc/</p>
+</blockquote>
+<pre><code>开启SSL功能选项
+</code></pre><ul>
+<li>取消注释：#Include etc//extra/httpd-ssl.conf</li>
+<li>取消注释：#LoadModule ssl_module modules/mod_ssl.so</li>
+<li><p>取消注释：#LoadModule socache_shmcb_module modules/mod_socache_shmcb.so</p>
+<p>设置ssl配置文件：vim /usr/local/apache2/etc/extra/httpd-ssl.conf<br><img src="http://os3vxur5n.bkt.clouddn.com/11.png" alt=""></p>
+</li>
+</ul>
+<h1 id="APACHE-实验：-HTTPS跳转"><a href="#APACHE-实验：-HTTPS跳转" class="headerlink" title="APACHE 实验：    HTTPS跳转"></a>APACHE 实验：    HTTPS跳转</h1><pre><code>前提是网站已经是加密状态
+</code></pre><hr>
+<pre><code>vim /usr/local/apache2/etc/httpd.conf
+</code></pre><ul>
+<li>开启：AllowOverride All</li>
+<li>取消注释：LoadModule rewrite_module modules/mod_rewrite.so</li>
+<li><p>取消注释：LoadModule socache_shmcb_module modules/mod_socache_shmcb.so</p>
+<p>在网站网页根目录下创建.htaccess文件,填写：</p>
+<blockquote>
+   <ifmodule mod_rewrite.c=""><br>    RewriteEngine On<br>    RewriteBase /<br>    RewriteCond %{SERVER_PORT} 80<br>    RewriteRule ^(.*)$ <a href="https://xxxxxx/$1" target="_blank" rel="external">https://xxxxxx/$1</a> [R=301,L]<br>   </ifmodule>
+
+
+
+
+</blockquote>
+</li>
+</ul>
 
   </article>
   <div class="random-toc-area">
@@ -163,7 +243,7 @@ APACHE 搭建本机环境：CentOS
   <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
   <div class="random-toc">
     <h2>目录</h2>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-搭建"><span class="toc-text">APACHE 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#源码安装"><span class="toc-text">源码安装</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-搭建"><span class="toc-text">APACHE 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#源码安装"><span class="toc-text">源码安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-身份验证-密码验证"><span class="toc-text">APACHE 实验：    身份验证-密码验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-身份验证-客户端验证"><span class="toc-text">APACHE 实验：    身份验证-客户端验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-目录别名"><span class="toc-text">APACHE 实验：    目录别名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-虚拟主机"><span class="toc-text">APACHE 实验：     虚拟主机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基于IP的虚拟主机"><span class="toc-text">基于IP的虚拟主机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于端口的虚拟主机"><span class="toc-text">基于端口的虚拟主机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于域名的虚拟主机"><span class="toc-text">基于域名的虚拟主机</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-个人主页"><span class="toc-text">APACHE 实验：    个人主页</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-地址跳转"><span class="toc-text">APACHE 实验：    地址跳转</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-HTTPS加密"><span class="toc-text">APACHE 实验：    HTTPS加密</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APACHE-实验：-HTTPS跳转"><span class="toc-text">APACHE 实验：    HTTPS跳转</span></a></li></ol>
   </div>
 </div>
 
