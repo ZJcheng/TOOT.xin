@@ -1,0 +1,486 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="You Th">
+  
+  
+  
+  
+    <meta name="description" content="Samba理论+配置文件
+Samba 搭建本机环境：CentOS
+RPM包：yum -y install samba
+主配置文件：vim /etc/samba/smb.conf
+配置文件检查工具：testparm
+Samba 实验：匿名用户登陆
+备份配置文件：cp -a /etc/samba/smb.conf  /etc/samba/smb.conf~
+
+配置文件：vim /etc/samb...">
+  
+  <title>Samba [ 放肆青春 ]</title>
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2017/07/02/APACHE/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        APACHE
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/07/02/VSFTP/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        VSFTP
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/简历">简历</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  <article id="post">
+    <h1>Samba</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-01</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-01</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/服务/">服务</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28593197&auto=0&height=66"></iframe><br></center>
+
+
+<p><a href="http://www.cnblogs.com/fengyutech/p/4918252.html" target="_blank" rel="external">Samba理论+配置文件</a></p>
+<h1 id="Samba-搭建"><a href="#Samba-搭建" class="headerlink" title="Samba 搭建"></a>Samba 搭建</h1><p>本机环境：CentOS</p>
+<p>RPM包：yum -y install samba<br><img src="http://i2.kiimg.com/598678/2238ae38a48fb1a8.png" alt=""></p>
+<p>主配置文件：vim /etc/samba/smb.conf</p>
+<p>配置文件检查工具：testparm</p>
+<h1 id="Samba-实验：匿名用户登陆"><a href="#Samba-实验：匿名用户登陆" class="headerlink" title="Samba 实验：匿名用户登陆"></a>Samba 实验：匿名用户登陆</h1><hr>
+<pre><code>备份配置文件：cp -a /etc/samba/smb.conf  /etc/samba/smb.conf~
+</code></pre><hr>
+<pre><code>配置文件：vim /etc/samba/smb.conf
+</code></pre><ul>
+<li>security:安全级别设置<br><img src="http://i2.kiimg.com/598678/2e663c6b61b410c2.png" alt=""></li>
+<li>开启windows 工作组，可以在windos登陆<br><img src="http://i2.kiimg.com/598678/cae047ececd31ad7.png" alt=""></li>
+<li>开启共享目录<br><img src="http://i2.kiimg.com/598678/4d6ff94265a3b7d2.png" alt=""></li>
+<li>客户端：smbclient  -L //IP/共享目录名<br><img src="http://i1.buimg.com/598678/9afd237736e0709b.png" alt=""></li>
+<li>客户端：smbclient //1.1.1.40/ceshi   不能用共享目录登陆，必须用共享名登陆<br><img src="http://i1.buimg.com/598678/a97665ebf653e2c9.png" alt=""></li>
+</ul>
+<h1 id="Samba-实验：用户登陆"><a href="#Samba-实验：用户登陆" class="headerlink" title="Samba 实验：用户登陆"></a>Samba 实验：用户登陆</h1><hr>
+<pre><code>配置文件：vim /etc/samba/smb.conf
+</code></pre><p><img src="http://i2.kiimg.com/598678/16ac0eb3e3b31ea4.png" alt=""><br><img src="http://i2.kiimg.com/598678/92b3c40c8abfbeb3.png" alt=""></p>
+<ul>
+<li><p>useradd zz #添加本地用户</p>
+<ul>
+<li>添加Samba用户<blockquote>
+<p>   处理命令  pdbedit   -a   系统存在用户<br>   查看已处理用户命令    pdbedit     -L<br>   删除已处理用户命令    pdbedit    -x</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>smbclient -U zz //1.1.1.40/ceshi   登陆  -U 指定用户登陆<br><img src="http://i2.kiimg.com/598678/daf272c3557f0724.png" alt=""><br><img src="http://i2.kiimg.com/598678/0761167a9261d761.png" alt=""><br><img src="http://i2.kiimg.com/598678/110325f03f2eba33.png" alt=""></p>
+</li>
+</ul>
+<h1 id="Samba-实验：权限设置"><a href="#Samba-实验：权限设置" class="headerlink" title="Samba 实验：权限设置"></a>Samba 实验：权限设置</h1><pre><code>配置文件:vim /etc/samba/smb.conf
+</code></pre><p><img src="http://i2.kiimg.com/598678/ef48f16ba9634df4.png" alt=""><br><img src="http://i2.kiimg.com/598678/330368dda0159ac6.png" alt=""><br><img src="http://i2.kiimg.com/598678/79754888ac0d4242.png" alt=""></p>
+<pre><code>指定权限分割
+</code></pre><p><img src="http://i1.buimg.com/598678/48db5845a65002c4.png" alt=""><br><img src="http://i1.buimg.com/598678/405d6595c79c8a75.png" alt=""><br><img src="http://i1.buimg.com/598678/80d52eb6f43bdeba.png" alt=""><br><img src="http://i1.buimg.com/598678/8cea200be8204bee.png" alt=""><br><img src="http://i1.buimg.com/598678/0d1944ee6f30c5da.png" alt=""></p>
+<ul>
+<li>[test]<blockquote>
+<p>   comment = test    说明<br>   path = /test        共享目录名称<br>   public = yes        是否允许所有人访问<br>   read only = yes    只读<br>   write list = zhangsan    指定某用户只读<br>   valid users = lisi    指定合法用户或组，只有写在这里的才可以登陆<br>   create mask = 0755    创建文件掩码值<br>   directory mask = 0755    创建目录掩码值</p>
+</blockquote>
+</li>
+<li>正常授权都使用：setfacl    来设置权限。在samba里设置权限不安全。</li>
+</ul>
+<h1 id="Samba-实验：-别名-限制"><a href="#Samba-实验：-别名-限制" class="headerlink" title="Samba 实验： 别名-限制"></a>Samba 实验： 别名-限制</h1><pre><code>限制
+</code></pre><ul>
+<li>修改配置文件：yum -y install samba<ul>
+<li>在主配置文件的  global 区域内声明</li>
+<li>hosts allow = 192.168.1.    申明允许网段<br><img src="http://i1.buimg.com/598678/c6315306874f601f.png" alt=""><br><img src="http://i1.buimg.com/598678/57d8a0195ed41fac.png" alt=""><br><img src="http://i1.buimg.com/598678/8cea259c62ea56a4.png" alt=""></li>
+</ul>
+</li>
+<li>hosts allow = 192.168.1.1    申明允许 IP</li>
+<li>hosts deny = 192.168.1.    申明拒绝网段</li>
+<li>hosts deny = 192.168.1.1    申明拒绝 IP</li>
+</ul>
+<p>说明：允许 allow 与拒绝 deny 不能同时出现，只能单独出现。出现 allow 代表只允许出现 IP / 网段访问，其它全部拒绝。出现 deny 代表只拒绝出现 IP / 网段访问，其它全部允许。</p>
+<pre><code>别名
+</code></pre><p>启用别名文件：在主配置文件的 global 区域内声明   username map = /etc/samba/smbusers</p>
+<ul>
+<li>配置文件：vim /etc/samba/smbusers<br><img src="http://i4.piimg.com/598678/a4c9e924f1137051.png" alt=""><br><img src="http://i4.piimg.com/598678/db8656d812a4adb2.png" alt=""></li>
+</ul>
+<h1 id="Samba-实验：图形化"><a href="#Samba-实验：图形化" class="headerlink" title="Samba 实验：图形化"></a>Samba 实验：图形化</h1><p><a href="http://os3vxur5n.bkt.clouddn.com/samba-swat.tar.gz" target="_blank" rel="external">安装 samba-swat </a>samba 的图形化配置</p>
+<ul>
+<li>修改 samba-swat 的配置文件:vim /etc/xinetd.d/swat<br><img src="http://i4.piimg.com/598678/a1356b0539cc06db.png" alt=""></li>
+</ul>
+<p>将“only_from=127.0.0.1”改成“only_from=0.0.0.0”，这样该服务器就可以监听所有的来访IP<br>将“disable=yes”改成“disable=no”，这样swat子进程就可以随xinetd超级守护进程一起启动了。可以吃用chkconfig命令查看swat是否启用了。<br>swat默认使用tcp的901端口。“port=901”，可以修改<br>通过web来配置samba，默认使用root账号进入。“user=root”，可以修改成其他的系统用户<br>swat的执行程序默认在/usr/sbin目录下</p>
+<p>启动服务：service xinetd restart</p>
+<p>查看端口是否开启   netstat -an | grep 901</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba-搭建"><span class="toc-text">Samba 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba-实验：匿名用户登陆"><span class="toc-text">Samba 实验：匿名用户登陆</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba-实验：用户登陆"><span class="toc-text">Samba 实验：用户登陆</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba-实验：权限设置"><span class="toc-text">Samba 实验：权限设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba-实验：-别名-限制"><span class="toc-text">Samba 实验： 别名-限制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Samba-实验：图形化"><span class="toc-text">Samba 实验：图形化</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/07/02/APACHE/" class="prev">&larr; 上一篇 APACHE</a>
+  
+
+  
+
+  
+    <a href="/2017/07/02/VSFTP/" class="next">下一篇 VSFTP &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by You Th using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/ZJcheng">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://weibo.com/u/6107250655">
+        
+          <i class="icon iconfont weibo">&#xe602;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+  <script>
+if(isTriggerAnalytics) {
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f15832fa2beb10725843b2702cf82399";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+}
+</script>
+
+
+
+  <script>
+if(isTriggerAnalytics) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101736855-1', 'auto');
+  ga('send', 'pageview');
+}
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/1c43953b79ab5bf0.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/e33029ff65cf5e2d.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/dcda941b49b24c38.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/883c8771706e9f47.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/58ade17c03935b32.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b1f7b1d418d0f8ba.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b47ba41371028de2.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/4e375f9893109b4f.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/13e3984276c67ab8.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/ca1f9761784b661e.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/20cafbbf15da2467.jpg');
+    
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["slideLeft2","slideRight2","flash2"],"timer":true,"delay":5000,"shuffle":true,"count":28};
+var unsplashConfig = {"gravity":"north"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+  turnoffBackgroundImage = true;
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
+
