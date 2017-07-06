@@ -1,0 +1,667 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="You Th">
+  
+  
+  
+  
+    <meta name="description" content="一些理论
+Mysql    搭建本机环境:centos
+本机环境：CentOS
+源码包：mysql-x-x-x
+配置文件可以自己指定
+源码安装安装gcc:yum -y install gcc*
+安装lrzsz：yum -y install lrzsz   用来上传软件
+安装 cmake 和 bison工具: yum -y install cmake bison  ncurses
+mysql ...">
+  
+  <title>Mysql [ 放肆青春 ]</title>
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
+  
+  
+    <div class="item next">
+      <a href="/2017/07/06/Mail/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Mail
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/简历">简历</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  <article id="post">
+    <h1>Mysql</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-06</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-06</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/服务/">服务</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=467037464&auto=0&height=66"></iframe><br></center>
+
+<p><a href="http://www.jianshu.com/p/742b95802a3c" target="_blank" rel="external">一些理论</a></p>
+<h1 id="Mysql-搭建"><a href="#Mysql-搭建" class="headerlink" title="Mysql    搭建"></a>Mysql    搭建</h1><p>本机环境:centos</p>
+<p>本机环境：CentOS</p>
+<p>源码包：<a href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="external">mysql-x-x-x</a></p>
+<p>配置文件可以自己指定</p>
+<h1 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h1><p>安装gcc:yum -y install gcc*</p>
+<p>安装lrzsz：yum -y install lrzsz   用来上传软件</p>
+<p>安装 cmake 和 bison工具: yum -y install cmake bison<em>  ncurses</em></p>
+<p>mysql 在 5.5 以后，不在使用 ./configure 工具，进行编译安装。而使用 cmake 工具代替了。bison 是一个自由软件，用于自动生成语法分析程序.</p>
+<p>解压：tar zvxf mysql-5.5.48.tar.gz   cd mysql-5….</p>
+<p>编译安装：cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DEXTRA_CHARSETS=all -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_MEMORY_STORAGE_ENGINE=1 -DWITH_READLINE=1 -DENABLED_LOCAL_INFILE=1 -DMYSQL_USER=mysql -DMYSQL_TCP_PORT=3306</p>
+<blockquote>
+<p>-DCMAKE_INSTALL_PREFIX=/usr/local/mysql 安装位置<br>-DMYSQL_UNIX_ADDR=/tmp/mysql.sock 指定 socket 文件位置<br>-DEXTRA_CHARSETS=all 扩展字符支持<br>-DDEFAULT_CHARSET=utf8 默认字符集<br>-DDEFAULT_COLLATION=utf8_general_ci 默认字符校队<br>-DWITH_MYISAM_STORAGE_ENGINE=1 安装 myisam 存储引擎<br>-DWITH_INNOBASE_STORAGE_ENGINE=1 安装 innodb 存储引擎<br>-DWITH_MEMORY_STORAGE_ENGINE=1 安装 memory 存储引擎<br>-DWITH_READLINE=1 支持 readline 库<br>-DENABLED_LOCAL_INFILE=1 启动加载本地数据<br>-DMYSQL_USER=mysql 指定运行用户为 mysql<br>-DMYSQL_TCP_PORT=3306 指定 mysql 端口</p>
+<p>make &amp;&amp; make install</p>
+</blockquote>
+<p>cd /usr/local/mysql/<br>chown -R root .<br>useradd -M -s  /sbin/nologin mysql<br>chown -R mysql data<br>修改 MySQL  目录权限</p>
+<p>cp support-files/my-medium.cnf /etc/my.cnf<br>复制 mysql 配置文件</p>
+<p>/usr/local/mysql/scripts/mysql_install_db –user=mysql<br>创建数据库授权表，初始化数据库</p>
+<p>/usr/local/mysql/bin/mysqld_safe –user=mysql &amp;<br>启动 MySQL  服务</p>
+<p>vim /etc/rc.local<br>/usr/local/mysql/bin/mysqld_safe –user=mysql &amp;<br>设置开机自启动 MySQL</p>
+<p>/usr/local/mysql/bin/mysqladmin -uroot password 123<br>设定 MySQL  初始密码，给 MySQL  用户 root  加密码 123</p>
+<p>测试 MySQL  数据库能否使用： /usr/local/mysql/bin/mysql -u root -p<br>mysql&gt;show databases;</p>
+<h1 id="Mysql-实验-主-从"><a href="#Mysql-实验-主-从" class="headerlink" title="Mysql 实验:主-从"></a>Mysql 实验:主-从</h1><p>实验环境：centos   </p>
+<p>RPM包：yum -y install mysql mysql-server</p>
+<ol>
+<li>安装服务 -  开启服务</li>
+</ol>
+<p>yum -y install mysql mysql-server</p>
+<p>service mysqld start</p>
+<ol>
+<li>修改配置文件： /etc/my.cnf （主、从都需添加）</li>
+</ol>
+<p>log-bin=mysql-bin 开起二进制日志文件</p>
+<p>server-id=xx 申明本台 mysql 服务器 ID</p>
+<p>service mysql restart 修改了配置文件，重新启动<br><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/1.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/2.png" alt=""><br>更改配置文件重启服务：service mysqld restart</p>
+<ol>
+<li>进入数据库（主服务器）</li>
+</ol>
+<p>创建数据库密码：mysqladmin -uroot password 123</p>
+<p>进入数据库：mysql -uroot -p</p>
+<p>grant replication slave on <em>.</em> to ‘ 用户 ‘@’%’ identified by ‘ 密码 ‘; 创建从服务器用户</p>
+<p>show master status; 查看二进制文件名，以及大小<br><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/3.png" alt=""></p>
+<ol>
+<li>进入数据库（从服务器）</li>
+</ol>
+<blockquote>
+<p>   change master to<br>   master_host=’ 主服务器 IP’,<br>   master_user=’用户’,<br>   master_password=’ 密码 ‘,<br>   master_log_file=’ 二进制文件 ‘,<br>   master_log_pos= 文件空间大小 ; 确定从主服务器同步</p>
+</blockquote>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/4.png" alt=""></p>
+<p>show slave status\G; 查看同步服务开启状态</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/5.png" alt=""></p>
+<p>start slave; 如果同步状态没有启动，则开启</p>
+<pre><code>测试
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/6.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/7.png" alt=""></p>
+<h1 id="Mysql-实验-主-从-从"><a href="#Mysql-实验-主-从-从" class="headerlink" title="Mysql 实验:主-从-从"></a>Mysql 实验:主-从-从</h1><pre><code>就是在主从的基础上在加上一台服务器，配置从服务器。
+</code></pre><p>进入配置文件：/etc/my.cnf</p>
+<p>开启二进制文件，指定server-id=？ Id号</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/8.png" alt=""></p>
+<p>进入mysql，声明主服务器：</p>
+<blockquote>
+<p>   change master to<br>   master_host=’ 主服务器 IP’,<br>   master_user=’用户’,<br>   master_password=’ 密码 ‘,<br>   master_log_file=’ 二进制文件 ‘,<br>   master_log_pos= 文件空间大小 ; 确定从主服务器同步</p>
+</blockquote>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/9.png" alt=""></p>
+<p>show slave status\G; 查看同步服务开启状态</p>
+<p>start slave; 如果同步状态没有启动，则开启</p>
+<pre><code>测试
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/10.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/11.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/12.png" alt=""></p>
+<p><em>*注意：三台数据库里的数据一定要相同，不然会同步失败；<br>把完整的数据导出，给不不完整的数据库.</em></p>
+<h1 id="Mysql-实验-主-主"><a href="#Mysql-实验-主-主" class="headerlink" title="Mysql 实验:主-主"></a>Mysql 实验:主-主</h1><pre><code>就是双方都是主从，双方是主从，就是主主。
+</code></pre><ol>
+<li>安装服务 - 开启服务</li>
+</ol>
+<p>yum -y install mysql mysql-server</p>
+<p>service mysqld start</p>
+<ol>
+<li>保持 mysql  版本和数据的一致性： 由主 1 服务器拷贝到主 2 服务器<br>主 1 服务器：</li>
+</ol>
+<p>flush tables with read lock;  锁定数据库的写入操作，为只读</p>
+<p>mysqldump -u root -p –all-databases &gt; 1.sql  备份主 1 数据库，还原到主 2 ，保持两台服务器的一致性</p>
+<p>scp 1.sql root@ 主 2 服务器地址：</p>
+<p>保存位置 主 2 服务器还原，确保 mysql 数据一致性</p>
+<p>unlock tables ； 取消锁定</p>
+<pre><code>主 2 服务器：
+</code></pre><p>mysql -uroot -p &lt; 备份文件</p>
+<ol>
+<li>修改配置文件： /etc/my.cnf （两台服务器都需添加）</li>
+</ol>
+<p>log-bin=mysql-bin  开启二进制日志文件</p>
+<p>server-id=xx 服务器 ID</p>
+<p>replicate-do-db=test  需要同步的数据库</p>
+<p>binlog-ignore-db=mysql 不需要同步的数据库</p>
+<p>binlog-ignore-db=information_schema  不需要同步的数据库</p>
+<p>auto-increment-increment=2  为了保证含有自增长的不会冲突</p>
+<p>auto-increment-offset=1 为了保证含有自增长的不会冲突</p>
+<p>service mysqld restart  修改了配置文件，重新启动</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/13.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/14.png" alt=""></p>
+<ol>
+<li>进入数据库（主服务器1）</li>
+</ol>
+<p>grant replication slave on <em>.</em> to ‘ 用户 ‘@’%’ identified by ‘ 密码 ‘;  创建从服务器用户</p>
+<p>show master status ； 查看二进制文件名，以及大小</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/15.png" alt=""></p>
+<ol>
+<li>进入数据库（主服务器2）</li>
+</ol>
+<p>进入mysql，声明主服务器：</p>
+<blockquote>
+<p>   change master to<br>   master_host=’ 主服务器 IP’,<br>   master_user=’用户’,<br>   master_password=’ 密码 ‘,<br>   master_log_file=’ 二进制文件 ‘,<br>   master_log_pos= 文件空间大小 ; 确定从主服务器同步</p>
+</blockquote>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/16.png" alt=""></p>
+<ol>
+<li>进入数据库（主服务器2）</li>
+</ol>
+<p>grant replication slave on <em>.</em> to ‘ 用户 ‘@’%’ identified by ‘ 密码 ‘;  创建从服务器用户</p>
+<p>show master status ； 查看二进制文件名，以及大小</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/17.png" alt=""></p>
+<ol>
+<li>进入数据库（主服务器1）</li>
+</ol>
+<p>进入mysql，声明主服务器：</p>
+<blockquote>
+<p>   change master to<br>   master_host=’ 主服务器 IP’,<br>   master_user=’用户’,<br>   master_password=’ 密码 ‘,<br>   master_log_file=’ 二进制文件 ‘,<br>   master_log_pos= 文件空间大小 ; 确定从主服务器同步</p>
+</blockquote>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/18.png" alt=""></p>
+<p>查看两台服务器的共享开启状态：show slave status\G;</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/19.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/20.png" alt=""></p>
+<pre><code>测试
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/21.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/22.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/23.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/24.png" alt=""></p>
+<h1 id="Mysql-实验-主-主-从"><a href="#Mysql-实验-主-主-从" class="headerlink" title="Mysql 实验:主-主-从"></a>Mysql 实验:主-主-从</h1><p>多个主服务器备份到一台从服务器（两台主服务器一台从服务器） mysqld-mulit 在一台服务器上启动多个 mysq 进程</p>
+<pre><code>主 1 服务器
+</code></pre><p>vi /etc/my.cnf ( 添加）</p>
+<blockquote>
+<p>   log-bin=mysql-bin</p>
+<p>   server-id=id 号</p>
+<p>   service mysqld start</p>
+</blockquote>
+<pre><code>主 2 服务器
+</code></pre><p>vi /etc/mysql.cnf ( 添加）</p>
+<blockquote>
+<p>   log-bin=mysql-bin</p>
+<p>   server-id=id 号</p>
+<p>   service mysqld start</p>
+</blockquote>
+<pre><code>主 1 服务器
+</code></pre><p>msyql 登入数据库</p>
+<p>grant replication slave on <em>.</em> to ‘ 用户 ‘@’%’ identified by ‘ 密码 ‘;  创建从服务器用户</p>
+<p>show master status ； 查看二进制文件名，以及大小</p>
+<pre><code>主 2 服务器
+</code></pre><p>msyql 登入数据库</p>
+<p>grant replication slave on <em>.</em> to ‘ 用户 ‘@’%’ identified by ‘ 密码 ‘;  创建从服务器用户</p>
+<p>show master status ； 查看二进制文件名，以及大小</p>
+<pre><code>从服务器
+</code></pre><p>vi /etc/my.cnf ( 添加）</p>
+<blockquote>
+<p>   [mysqld_multi]</p>
+<p>   mysqld=/usr/bin/mysqld_safe</p>
+<p>   mysqladmin=/usr/bin/mysqladmin</p>
+<p>   log=/tmp/multi.log</p>
+</blockquote>
+<pre><code>从服务器
+</code></pre><p>vi /etc/my.cnf ( 添加）</p>
+<blockquote>
+<p>   [mysqld 数字 ] 名字随便，一般 mysql+ip</p>
+<p>   port=3306</p>
+<p>   pid-file=/var/lib/mysqla/mysqld.pid</p>
+<p>   datadir=/var/lib/mysqla</p>
+<p>   socket=/var/lib/mysqla/mysql.sock</p>
+<p>   server-id= </p>
+<p>   user=mysql</p>
+<p>   [mysqld 数字 ] 名字随便，一般 mysql+ip</p>
+<p>   port=3307</p>
+<p>   pid-file=/var/lib/mysqlb/mysqld.pid</p>
+<p>   datadir=/var/lib/mysqlb</p>
+<p>   socket=/var/lib/mysqlb/mysql.sock</p>
+<p>   server-id= </p>
+<p>   user=mysql</p>
+</blockquote>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/25.png" alt=""></p>
+<p>mysql_install_db –datadir=/var/lib/mysqla –user=mysql  初始化 mysqla 数据库</p>
+<p>mysql_install_db –datadir=/var/lib/mysqlb –user=mysql  初始化 mysqlb 数据库</p>
+<pre><code>cd /var/lib
+</code></pre><p>chown -R mysql /var/lib/mysqla/  修改文件权限</p>
+<p>chown -R mysql /var/lib/mysqlb/  修改文件权限</p>
+<p>mysqld_multi –defaults-file=/etc/my.cnf start  主 1id 号，开起数据库 01 ，为主 1 备份</p>
+<p>netstat -anpt 查看饰扣开启了 3306 端口如果开启则说明开启成功</p>
+<p>mysqld_multi –defaults-file=/etc/my.cnf start 主 2id 号，开起数据库 02 ，为主 2 备份</p>
+<p>netstat -anpt 查看饰扣开启了 3307 端口如果开启则说明开启成功</p>
+<p>mysql -P 3306 -S /var/lib/mysqla/mysql.sock  登录数据库 01</p>
+<p>change master to master_host=’ 主服务器 IP’,master_user=’ 用户 ‘,master_password=’ 密码 ‘,master_log_file=’ 二进制文件 ‘,master_log_pos= 文件空间大小； 确定从主服务器同步</p>
+<p>change master to master_host=’66.66.66.10’, master_user=’z1’, master_password=’123’, master_log_file=’mysql-bin.000001’, master_log_pos=229;</p>
+<p>show slave status\G; 查看同步服务开启状态</p>
+<p>start slave; 如果同步状态没有启动，则开启</p>
+<p>exit  离开数据库</p>
+<p>mysql -P 3307 -S /var/lib/mysqlb/mysql.sock  登录数据库 02</p>
+<p>change master to master_host=’ 主服务器 IP’,master_user=’ 用户 ‘,master_password=’ 密码 ‘,master_log_file=’ 二进制文件 ‘,master_log_pos= 文件空间大小； 确定从主服务器同步</p>
+<p>change master to master_host=’66.66.66.10’, master_user=’z1’, master_password=’123’, master_log_file=’mysql-bin.000001’, master_log_pos=229;</p>
+<p>show slave status\G; 查看同步服务开启状态</p>
+<p>start slave; 如果同步状态没有启动，则开启</p>
+<p>exit  离开数据库</p>
+<pre><code>注意主从数据库之间的 ID 一定不能相同
+</code></pre><hr>
+<pre><code>测试
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/26.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/27.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/28.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/29.png" alt=""></p>
+<h1 id="Mysql-实验-读-写-分离"><a href="#Mysql-实验-读-写-分离" class="headerlink" title="Mysql 实验:读-写-分离"></a>Mysql 实验:读-写-分离</h1><hr>
+<pre><code>主 —  从 — amoeb
+</code></pre><ol>
+<li>建立两台数据库的主从关系</li>
+</ol>
+<p>安装服务 - 开启服务（主、从 =mysql mysql-server ， amoceba=mysql ）</p>
+<p>yum -y install mysql mysql-server</p>
+<p>service mysqld start</p>
+<p>修改配置文件： /etc/my.cnf （主、从都需添加）</p>
+<p>log-bin=mysql-bin  开起二进制日志文件</p>
+<p>server-id=xx  申明本台 mysql 服务器 ID</p>
+<p>service mysqld restart  修改了配置文件，重新启动</p>
+<p>进入数据库（主服务器）</p>
+<p>grant all privileges on <em>.</em> to ‘wangyang’@’%’ identified by ‘123’; </p>
+<p>创建从服务器认证用户</p>
+<p>show master status ； 查看二进制文件名，以及大小</p>
+<p>进入数据库（从服务器）</p>
+<p>grant all privileges on <em>.</em> to ‘wangyang’@’%’ identified by ‘123’; </p>
+<p>创建从服务器认证用户</p>
+<p>change master to master_host=’ 主服务器 IP’,master_user=’ 用户 ‘,master_password=’ 密码 ‘,master_log_file=’ 二进制文件 ‘,master_log_pos= 文件空间大小； 确定从主服务器同步</p>
+<p>show slave status\G; 查看同步服务开启状态</p>
+<p>start slave; 如果同步状态没有启动，则开启</p>
+<ol>
+<li>配置 amoeba  服务器</li>
+</ol>
+<p>进入 amoeba 服务器</p>
+<p>mkdir /amoeba</p>
+<p>tar -zxf jdk-7u40-linux-x64.gz -C /amoeba/</p>
+<p>vi /etc/profile</p>
+<p>JAVA_HOME=/xxx/jdk</p>
+<p>export JAVA_HOME</p>
+<p>PATH=$JAVA_HOME/bin:$PATH</p>
+<p>export PATH</p>
+<p>CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar:$CLASSPATH</p>
+<p>export CLASSPATH</p>
+<p>cd /amoeba</p>
+<p>ln -s jdk1.7.0_40/ jdk</p>
+<p>. /etc/profile</p>
+<p>echo $PATH  显示下图则成功</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/30.png" alt=""></p>
+<p>java -version 显示下图则成功</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/31.png" alt=""></p>
+<p>unzip amoeba-mysql-1.3.1-BETA.zip -d /usr/local/amoeba</p>
+<p>chmod -R a+x /usr/local/amoeba/bin/</p>
+<p>cd /usr/local/amoeba/conf</p>
+<pre><code>amoeba主配置文件：amoeba.xml
+</code></pre><p>vim amoeba.xml</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-搭建"><span class="toc-text">Mysql    搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#源码安装"><span class="toc-text">源码安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-实验-主-从"><span class="toc-text">Mysql 实验:主-从</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-实验-主-从-从"><span class="toc-text">Mysql 实验:主-从-从</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-实验-主-主"><span class="toc-text">Mysql 实验:主-主</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-实验-主-主-从"><span class="toc-text">Mysql 实验:主-主-从</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-实验-读-写-分离"><span class="toc-text">Mysql 实验:读-写-分离</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+
+  
+
+  
+    <a href="/2017/07/06/Mail/" class="next">下一篇 Mail &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by You Th using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/ZJcheng">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://weibo.com/u/6107250655">
+        
+          <i class="icon iconfont weibo">&#xe602;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+  <script>
+if(isTriggerAnalytics) {
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f15832fa2beb10725843b2702cf82399";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+}
+</script>
+
+
+
+  <script>
+if(isTriggerAnalytics) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101736855-1', 'auto');
+  ga('send', 'pageview');
+}
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/1c43953b79ab5bf0.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/e33029ff65cf5e2d.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/dcda941b49b24c38.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/883c8771706e9f47.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/58ade17c03935b32.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b1f7b1d418d0f8ba.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b47ba41371028de2.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/4e375f9893109b4f.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/13e3984276c67ab8.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/ca1f9761784b661e.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/20cafbbf15da2467.jpg');
+    
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["slideLeft2","slideRight2","flash2"],"timer":true,"delay":5000,"shuffle":true,"count":28};
+var unsplashConfig = {"gravity":"north"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+  turnoffBackgroundImage = true;
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
+

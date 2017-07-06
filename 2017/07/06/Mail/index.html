@@ -49,6 +49,15 @@ yum -y install httpd mysql mysql-server mysql-devel php php-mysql
 <body>
 <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2017/07/06/Mysql/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Mysql
+      </div>
+    </div>
+  
   
     <div class="item next">
       <a href="/2017/07/06/RSYNC/">
@@ -245,7 +254,7 @@ yum -y install httpd mysql mysql-server mysql-devel php php-mysql
 <p>telnet localhost 110 Trying ::1…</p>
 <p>Connected to localhost.</p>
 <p>Escape character is ‘^]’.</p>
-<p>+OK Dovecot ready. <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x31;&#x38;&#x33;&#50;&#x2e;&#x31;&#x2e;&#53;&#x31;&#x33;&#x35;&#x36;&#48;&#x62;&#52;&#x2e;&#76;&#102;&#116;&#77;&#x58;&#112;&#56;&#x64;&#116;&#106;&#117;&#106;&#70;&#x2f;&#114;&#x65;&#66;&#84;&#111;&#x64;&#x4c;&#x77;&#61;&#x3d;&#x40;&#x64;&#101;&#x73;&#107;&#x74;&#x6f;&#x70;&#x31;&#57;&#46;&#x65;&#120;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">&#x31;&#x38;&#x33;&#50;&#x2e;&#x31;&#x2e;&#53;&#x31;&#x33;&#x35;&#x36;&#48;&#x62;&#52;&#x2e;&#76;&#102;&#116;&#77;&#x58;&#112;&#56;&#x64;&#116;&#106;&#117;&#106;&#70;&#x2f;&#114;&#x65;&#66;&#84;&#111;&#x64;&#x4c;&#x77;&#61;&#x3d;&#x40;&#x64;&#101;&#x73;&#107;&#x74;&#x6f;&#x70;&#x31;&#57;&#46;&#x65;&#120;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>+OK Dovecot ready. <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#x31;&#x38;&#x33;&#x32;&#46;&#49;&#x2e;&#x35;&#x31;&#51;&#x35;&#54;&#x30;&#98;&#52;&#x2e;&#x4c;&#102;&#116;&#x4d;&#88;&#112;&#56;&#100;&#116;&#x6a;&#x75;&#x6a;&#70;&#47;&#114;&#101;&#x42;&#x54;&#x6f;&#100;&#76;&#119;&#x3d;&#61;&#64;&#x64;&#101;&#115;&#x6b;&#x74;&#x6f;&#112;&#49;&#x39;&#x2e;&#x65;&#120;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#111;&#109;">&#x31;&#x38;&#x33;&#x32;&#46;&#49;&#x2e;&#x35;&#x31;&#51;&#x35;&#54;&#x30;&#98;&#52;&#x2e;&#x4c;&#102;&#116;&#x4d;&#88;&#112;&#56;&#100;&#116;&#x6a;&#x75;&#x6a;&#70;&#47;&#114;&#101;&#x42;&#x54;&#x6f;&#100;&#76;&#119;&#x3d;&#61;&#64;&#x64;&#101;&#115;&#x6b;&#x74;&#x6f;&#112;&#49;&#x39;&#x2e;&#x65;&#120;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#111;&#109;</a></p>
 <p>user postmaster@extmail.org</p>
 <p>+OK</p>
 <p>pass extmail</p>
@@ -259,8 +268,9 @@ yum -y install httpd mysql mysql-server mysql-devel php php-mysql
 </ol>
 <p>vim /etc/httpd/conf/httpd.conf</p>
 <p>NameVirtualHost *:80 #apache2.2要使虚拟主机生效一定要打开这个选项</p>
-<virtualhost *:80=""><br>      ServerName mail.extmail.org<br>      DocumentRoot /var/www/extsuite/extmail/html/<br>      ScriptAlias /extmail/cgi /var/www/extsuite/extmail/cgi<br>      Alias /extmail /var/www/extsuite/extmail/html<br>      ScriptAlias /extman/cgi /var/www/extsuite/extman/cgi<br>      Alias /extman /var/www/extsuite/extman/html<br>      SuexecUserGroup vmail vmail<br></virtualhost>
-
+<p>VirtualHost *:80&gt;</p>
+<p>ServerName mail.extmail.org<br>DocumentRoot /var/www/extsuite/extmail/html/<br>ScriptAlias /extmail/cgi /var/www/extsuite/extmail/cgi<br>Alias /extmail /var/www/extsuite/extmail/html<br>ScriptAlias /extman/cgi /var/www/extsuite/extman/cgi<br>Alias /extman /var/www/extsuite/extman/html<br>SuexecUserGroup vmail vmail</p>
+<p>VirtualHost&gt;</p>
 <p><img src="http://os3vxur5n.bkt.clouddn.com/mail/9.png" alt=""></p>
 <p>cd /var/www/extsuite/extmail</p>
 <p>chown vmail.vmail cgi/ -R </p>
@@ -326,6 +336,8 @@ yum -y install httpd mysql mysql-server mysql-devel php php-mysql
 
   
 <nav id="pagination">
+  
+    <a href="/2017/07/06/Mysql/" class="prev">&larr; 上一篇 Mysql</a>
   
 
   
