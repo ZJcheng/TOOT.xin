@@ -331,13 +331,11 @@ mysql ...">
 <p>netstat -anpt 查看饰扣开启了 3307 端口如果开启则说明开启成功</p>
 <p>mysql -P 3306 -S /var/lib/mysqla/mysql.sock  登录数据库 01</p>
 <p>change master to master_host=’ 主服务器 IP’,master_user=’ 用户 ‘,master_password=’ 密码 ‘,master_log_file=’ 二进制文件 ‘,master_log_pos= 文件空间大小； 确定从主服务器同步</p>
-<p>change master to master_host=’66.66.66.10’, master_user=’z1’, master_password=’123’, master_log_file=’mysql-bin.000001’, master_log_pos=229;</p>
 <p>show slave status\G; 查看同步服务开启状态</p>
 <p>start slave; 如果同步状态没有启动，则开启</p>
 <p>exit  离开数据库</p>
 <p>mysql -P 3307 -S /var/lib/mysqlb/mysql.sock  登录数据库 02</p>
 <p>change master to master_host=’ 主服务器 IP’,master_user=’ 用户 ‘,master_password=’ 密码 ‘,master_log_file=’ 二进制文件 ‘,master_log_pos= 文件空间大小； 确定从主服务器同步</p>
-<p>change master to master_host=’66.66.66.10’, master_user=’z1’, master_password=’123’, master_log_file=’mysql-bin.000001’, master_log_pos=229;</p>
 <p>show slave status\G; 查看同步服务开启状态</p>
 <p>start slave; 如果同步状态没有启动，则开启</p>
 <p>exit  离开数据库</p>
@@ -361,11 +359,11 @@ mysql ...">
 <p>server-id=xx  申明本台 mysql 服务器 ID</p>
 <p>service mysqld restart  修改了配置文件，重新启动</p>
 <p>进入数据库（主服务器）</p>
-<p>grant all privileges on <em>.</em> to ‘wangyang’@’%’ identified by ‘123’; </p>
+<p>grant all privileges on <em>.</em> to ‘toot’@’%’ identified by ‘123’; </p>
 <p>创建从服务器认证用户</p>
 <p>show master status ； 查看二进制文件名，以及大小</p>
 <p>进入数据库（从服务器）</p>
-<p>grant all privileges on <em>.</em> to ‘wangyang’@’%’ identified by ‘123’; </p>
+<p>grant all privileges on <em>.</em> to ‘toot’@’%’ identified by ‘123’; </p>
 <p>创建从服务器认证用户</p>
 <p>change master to master_host=’ 主服务器 IP’,master_user=’ 用户 ‘,master_password=’ 密码 ‘,master_log_file=’ 二进制文件 ‘,master_log_pos= 文件空间大小； 确定从主服务器同步</p>
 <p>show slave status\G; 查看同步服务开启状态</p>
@@ -394,7 +392,18 @@ mysql ...">
 <p>chmod -R a+x /usr/local/amoeba/bin/</p>
 <p>cd /usr/local/amoeba/conf</p>
 <pre><code>amoeba主配置文件：amoeba.xml
-</code></pre><p>vim amoeba.xml</p>
+</code></pre><p>vim amoeba.xml<br><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/32.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/33.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/34.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/35.png" alt=""></p>
+<p>cd /usr/local/amoeba/bin/</p>
+<p>vim amoeba</p>
+<p>#DEFAULT_OPTS=”-server -Xms256m -Xmx256m -Xss128k”</p>
+<p>DEFAULT_OPTS=”-server -Xms256m -Xmx256m -Xss256k</p>
+<p>nohup bash -x /usr/local/amoeba/bin/amoeba &amp; 启动命令</p>
+<p>ps aux | grep amoeba 如下图则正确</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Mysql/36.png" alt=""></p>
+<p>连接：mysql -u root -p -h IP -P 9000  ：端口</p>
 
   </article>
   <div class="random-toc-area">
