@@ -1,0 +1,463 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="You Th">
+  
+  
+  
+  
+    <meta name="description" content="SquidSquid一款在Linux系统中最为流行的高性能代理服务软件，通常它会被用作是Web网站的前置缓存服务，能够替代用户向网站源服务器请求页面数据并进行缓存。简单来讲，Squid服务程序会按照接收到的用户请求来获取网页、图片等用户所需的数据并自动存储在服务器内，当后面的用户再来请求相同数据时，则可以直接把刚刚储存在服务器本地的数据交给用户，这样不仅大幅减少了用户的等待时间，进而还能减轻...">
+  
+  <title>Squid [ 放肆青春 ]</title>
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2017/07/09/Nagios/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Nagios
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/07/06/Mysql/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Mysql
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/简历">简历</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  <article id="post">
+    <h1>Squid</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-08</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-08</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/服务/">服务</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=168038&auto=0&height=66"></iframe><br></center>
+
+
+<h1 id="Squid"><a href="#Squid" class="headerlink" title="Squid"></a>Squid</h1><p>Squid一款在Linux系统中最为流行的高性能代理服务软件，通常它会被用作是Web网站的前置缓存服务，能够替代用户向网站源服务器请求页面数据并进行缓存。简单来讲，Squid服务程序会按照接收到的用户请求来获取网页、图片等用户所需的数据并自动存储在服务器内，当后面的用户再来请求相同数据时，则可以直接把刚刚储存在服务器本地的数据交给用户，这样不仅大幅减少了用户的等待时间，进而还能减轻网站源服务器的负载压力。</p>
+<p>Squid服务程序配置起来相对简单，效率高，功能丰富，它能支持如HTTP、FTP、SSL等多种协议的数据缓存，基于ACL访问控制列表和ARL访问权限列表功能的内容过滤与权限管理功能，基于多种条件来禁止用户访问存在威胁或不适宜的网站资源，在保证企业内网安全的同时还整体的提高了客户机的网页访问速度，帮助节省网络带宽。由于缓存代理服务不仅会消耗服务器较多的CPU计算性能、内存及硬盘空间等硬件资源，同时还需要较大的网络带宽来保证给用户传送数据的效率，每年的网络带宽开销就有可能超过数十万元，因此很多IDC或CDN服务供应商就会把缓存代理节点服务器放置在国内二三线城市来节约成本，Squid服务程序在为用户提供缓存代理服务时，可以从功能作用上分为正向代理和反向代理：</p>
+<p>正向代理模式是让用户通过Squid服务程序获取到网站页面等资源，具体服务方式上又可以分为标准代理模式与透明代理模式，标准正向代理模式是把网站数据缓存到服务器本地，提高数据资源被再次访问时的效率，但用户必需在上网时在浏览器等软件中填写代理服务器的IP地址与端口号信息，否则默认不使用代理服务，透明正向代理模式的功能作用与标准正向代理模式完全相同，区别是用户不需要手动指定代理服务器的IP地址与端口号，所以这种代理服务对于用户来讲是相对透明的工作模式，</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/1.png" alt=""></p>
+<p>日常中网站普遍的加载有大量图片、视频等静态资源内存，这些静态资源相对来说是比较稳定的数据信息，咱们可以使用Squid服务程序提供的反向代理模式来响应用户访问网站页面中静态资源的请求。而且如果反向代理服务器中恰巧已经有了用户要访问的静态资源则直接把缓存的内容发送给用户，这样不仅加快了用户的网站访问速度，而且还在一定程度上降低了网站服务器的负载压力.</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/2.png" alt=""></p>
+<p>总结来说，正向代理模式一般会被用于企业局域网之中，让内网用户统一的通过Squid服务器访问互联网资源，不仅能够在一定程度上减少公网带宽开销，最主要的是还能做到网站内容的筛查限制，一旦内网用户访问的网站内容匹配到了禁止规则就会自动屏蔽网站，是非常不错的内容监管方案。而反向代理模式一般是为大中型网站提供缓存服务的，把网站中的静态资源保存在国内多个节点机房中，当有用户发起网站资源请求的时候可以就近为用户分配节点并传输资源，是一种在大型网站中十分普遍使用的技术。</p>
+<h1 id="Squid-搭建"><a href="#Squid-搭建" class="headerlink" title="Squid    搭建"></a>Squid    搭建</h1><p>本机环境：centos</p>
+<p>RPM包：yum -y install squid</p>
+<p>配置文件位置：vim /etc/squid/squid.conf</p>
+<h1 id="Squid实验：传统代理"><a href="#Squid实验：传统代理" class="headerlink" title="Squid实验：传统代理"></a>Squid实验：传统代理</h1><p>备份：cp -a /etc/squid/squid.conf /etc/squid/squid.conf~</p>
+<p>配置：vim /etc/squid/squid.conf</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/3.png" alt=""></p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/4.png" alt=""></p>
+<p>启动服务：service  squid start</p>
+<pre><code>测试
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/5.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/Squid/6.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/Squid/7.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/Squid/8.png" alt=""></p>
+<h1 id="Squid实验：透明代理"><a href="#Squid实验：透明代理" class="headerlink" title="Squid实验：透明代理"></a>Squid实验：透明代理</h1><p>开启3台虚拟机用来做实验<br>环境：第一台：网段66（内网）第二台：双网卡路由squid服务器  第三台:网段10（外网）</p>
+<p>squid服务器配置：vim /etc/squid/squid.conf</p>
+<p>http_port 66.66.66.20:3128  transparent #ip 为网关内网 IP</p>
+<p>visible_hostname www.toot.xin</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/9.png" alt=""></p>
+<p>service squid start</p>
+<p>vi /etc/sysctl.conf</p>
+<p>net.ipv4.ip_forward = 1 开启路由转发</p>
+<p>添加路由规则:    iptables -t nat -A PREROUTING -i eth0( 内网网卡 ) -s 66.66.66.0/24 -p tcp –dport 80 -j REDIRECT –to-ports 3128 </p>
+<p>内网用户测试：<br><img src="http://os3vxur5n.bkt.clouddn.com/Squid/10.png" alt=""></p>
+<h1 id="Squid实验：反向代理"><a href="#Squid实验：反向代理" class="headerlink" title="Squid实验：反向代理"></a>Squid实验：反向代理</h1><p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/11.png" alt=""></p>
+<pre><code>内网 1
+</code></pre><p>router add default gw 66.66.66.20 添加默认路由</p>
+<p>vim /var/www/html/index.html</p>
+<p>www.toot.xin</p>
+<p>service httpd start</p>
+<pre><code>内网 2
+</code></pre><p>router add default gw 66.66.66.20 添加默认路由</p>
+<p>vim /var/www/html/index.html</p>
+<p>toot.xin</p>
+<p>service httpd start</p>
+<pre><code>网关
+</code></pre><p>yum -y install squid 安装 squid 服务</p>
+<p>vim /etc/squid/squid.conf</p>
+<p>http_access allow all</p>
+<p>http_port 10.10.10.10:80( 网关外网口地址 ) vhost</p>
+<p>visible_hostname www.xdl.com</p>
+<p>cache_peer 66.66.66.10 （内网中网页服务器 IP ） parent 80 0  （网络中是否还有其他代理） originserver round-robin （节点以轮询的方式）</p>
+<p>cache_peer 66.66.66.11 parent 80 0 originserver round-robin</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/12.png" alt=""><br>vim /etc/sysctl.conf  #开启路由转发</p>
+<p>sysctl -p </p>
+<p>service squid start</p>
+<p>客户端测试：</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Squid/13.png" alt=""></p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Squid"><span class="toc-text">Squid</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Squid-搭建"><span class="toc-text">Squid    搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Squid实验：传统代理"><span class="toc-text">Squid实验：传统代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Squid实验：透明代理"><span class="toc-text">Squid实验：透明代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Squid实验：反向代理"><span class="toc-text">Squid实验：反向代理</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/07/09/Nagios/" class="prev">&larr; 上一篇 Nagios</a>
+  
+
+  
+
+  
+    <a href="/2017/07/06/Mysql/" class="next">下一篇 Mysql &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by You Th using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/ZJcheng">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://weibo.com/u/6107250655">
+        
+          <i class="icon iconfont weibo">&#xe602;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+  <script>
+if(isTriggerAnalytics) {
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f15832fa2beb10725843b2702cf82399";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+}
+</script>
+
+
+
+  <script>
+if(isTriggerAnalytics) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101736855-1', 'auto');
+  ga('send', 'pageview');
+}
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/1c43953b79ab5bf0.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/e33029ff65cf5e2d.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/dcda941b49b24c38.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/883c8771706e9f47.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/58ade17c03935b32.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b1f7b1d418d0f8ba.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b47ba41371028de2.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/4e375f9893109b4f.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/13e3984276c67ab8.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/ca1f9761784b661e.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/20cafbbf15da2467.jpg');
+    
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["slideLeft2","slideRight2","flash2"],"timer":true,"delay":5000,"shuffle":true,"count":28};
+var unsplashConfig = {"gravity":"north"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+  turnoffBackgroundImage = true;
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
+
