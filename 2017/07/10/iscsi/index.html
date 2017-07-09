@@ -1,8 +1,6 @@
 
 
 
-  
-
 
 
 
@@ -18,9 +16,16 @@
   
   
   
-    <meta name="description" content="You Th">
+    <meta name="description" content="ISCSI
+ISCSI 搭建本机环境：centos （多硬盘）
+lvm整合
+pvcreate /dev/sdb     创建物理卷
+vgcreate vg0 /dev/sdb     创建卷组
+lvcreate -L（创建的大小） 1G -n（创建名称） lv0 vg0（从哪里创建） 创建逻辑卷
+mkfs -t ext4 /dev/vg0/lv0  对创建的逻辑卷进行格式化
+在 target...">
   
-  <title>标签: 服务 [ 放肆青春 ]</title>
+  <title>iscsi [ 放肆青春 ]</title>
   
   
     <link rel="shortcut icon" href="/favicon.ico">
@@ -39,6 +44,24 @@
 <body>
 <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2017/07/10/RHCS/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        RHCS
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/07/10/PXE/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        PXE
+      </div>
+    </div>
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -89,519 +112,126 @@
     <div id="content-inner">
       
       
-  <div id="tag">
-    <h1>服务</h1>
-    
+  <article id="post">
+    <h1>iscsi</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-09</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-09</span>
+      
+      
+      <span id = "post-title-categories">分类
       
       
         
-          
         
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
       
       
-      <div class="post-title-item">
-  
-  <a href="/2017/07/02/APACHE/">
-  
-    APACHE
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-1</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
+      <span id = "post-title-tags">
+      标签
       
       
         
-          
         
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/06/26/DHCP/">
-  
-    DHCP
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">6-25</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/06/30/DNS/">
-  
-    DNS
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">6-30</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/06/Mail/">
-  
-    Mail
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-5</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/06/Mysql/">
-  
-    Mysql
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-6</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/06/NGINX/">
-  
-    NGINX
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-5</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/06/RSYNC/">
-  
-    RSYNC
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-5</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/02/Samba/">
-  
-    Samba
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-1</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/09/Squid/">
-  
-    Squid
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-8</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-          
-        
-      
-      
-      <div class="post-title-item">
-  
-  <a href="/2017/07/02/VSFTP/">
-  
-    VSFTP
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-1</span>
-    
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/服务/">服务</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
+        <a href="/tags/集群/">集群</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=27929366&auto=0&height=66"></iframe><br></center>
+
+<p><a href="https://zh.wikipedia.org/wiki/ISCSI" target="_blank" rel="external">ISCSI</a></p>
+<h1 id="ISCSI-搭建"><a href="#ISCSI-搭建" class="headerlink" title="ISCSI 搭建"></a>ISCSI 搭建</h1><p>本机环境：centos （多硬盘）</p>
+<pre><code>lvm整合
+</code></pre><p>pvcreate /dev/sdb     创建物理卷</p>
+<p>vgcreate vg0 /dev/sdb     创建卷组</p>
+<p>lvcreate -L（创建的大小） 1G -n（创建名称） lv0 vg0（从哪里创建） 创建逻辑卷</p>
+<p>mkfs -t ext4 /dev/vg0/lv0  对创建的逻辑卷进行格式化</p>
+<pre><code>在 target 端创建 IQN 标签
+</code></pre><p>yum -y install scsi-target-utils    yum安装包，创建iSCSI对象</p>
+<p>service tgtd start    开启服务</p>
+<p>netstat -anpt | grep tgtd    查看服务是否开启</p>
+<pre><code>tgtadm -L（指定驱动类型） iscsi -o（制定操作类型） new -m（制定管理的对象） target -t （制定当前存储资源id号）1    -T（制定iqn标签，命名规则：iqn.创建年-月.域名反写：自定义） iqn.2017-7.xin.toot.www:lvm
+</code></pre><ul>
+<li>tgtadm -L iscsi -o new -m target -t 1 -T iqn.2017-7.inx.toot.www:lvm</li>
+</ul>
+<p>tgtadm -L iscsi -o show -m target    #查看target创建的信息</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/ISCSI/1.png" alt=""></p>
+<pre><code>绑定 IQN 标签到存储设备
+</code></pre><hr>
+<pre><code>tgtadm -L（指定驱动类型） iscsi -o new -m（管理的对象） logicalunit -t （tat标签）1 -l（逻辑存储单元的标签） 1 -b（设备名称） /dev/vg0/lv0
+</code></pre><ul>
+<li>tgtadm -L iscsi -o new -m logicalunit -t 1 -l 1 -b /dev/vg0/lv0</li>
+</ul>
+<p>tgtadm -L iscsi -o bind -m target -t 1 -I 66.66.66.0/24  #指定绑定的客户端</p>
+<p>tgtadm -L iscsi -o show -m target    查看target创建的信息</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/ISCSI/2.png" alt=""></p>
+<pre><code>客户端配置
+</code></pre><p>yum -y install iscsi-initiator-utils</p>
+<p>iscsiadm -m discovery -t st -p（指定服务器IP地址） 66.66.66.10</p>
+<p>iscsiadm -m node -T iqn.2017-7.xin.toot.www:lvm –login  在客户端进行挂载</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/ISCSI/3.png" alt=""><br><img src="http://os3vxur5n.bkt.clouddn.com/ISCSI/4.png" alt=""></p>
+<p>iscsiadm -m node -T iqn.2017-7.xin.toot.www:lvm –logout  在客户端进行卸载</p>
+<ul>
+<li>vi /etc/fstab    修改自动挂载文件<ul>
+<li>/dev/sdb        /mnt    ext4    defaults,_netdev        0 0  （添加）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<pre><code>命令配置太麻烦，更改服务端配置文件可以实现同样的效果
+</code></pre><hr>
+<pre><code>vim /etc/tgt/targets.conf
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/ISCSI/5.png" alt=""></p>
+<pre><code>重启服务，测试~！
+</code></pre>
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ISCSI-搭建"><span class="toc-text">ISCSI 搭建</span></a></li></ol>
   </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/07/10/RHCS/" class="prev">&larr; 上一篇 RHCS</a>
+  
 
   
 
+  
+    <a href="/2017/07/10/PXE/" class="next">下一篇 PXE &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
       
       
     </div>
@@ -618,6 +248,12 @@
 </div>
 
 </div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
 
 
 <div id="user-card">
@@ -761,6 +397,8 @@ var unsplashConfig = {"gravity":"north"};
 var turnoffBackgroundImage = false;
 
 
+
+  turnoffBackgroundImage = true;
 
 
 var backgroundColor = "34495E";

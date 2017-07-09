@@ -1,0 +1,647 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="You Th">
+  
+  
+  
+  
+    <meta name="description" content="LVS理论
+LVS 搭建本机环境：centos
+NAT    模式的集群
+
+准备5台机器：1ps-外网测试 2ps-网关 3ps-内网服务    4ps-内网服务 5ps-nfs共享存储
+所有内网主机全部要指网关
+nfs 服务器搭建
+创建共享目录： mkdir /test
+修改 nfs 配置文件：    vim /etc/exports
+共享的目录 客户端地址（共享的权限）  /test 6...">
+  
+  <title>LVS [ 放肆青春 ]</title>
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
+  
+  
+    <div class="item next">
+      <a href="/2017/07/10/RHCS/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        RHCS
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/简历">简历</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  <article id="post">
+    <h1>LVS</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-09</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-09</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/集群/">集群</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><br></center>
+
+<p><a href="http://caduke.blog.51cto.com/3365689/1544229" target="_blank" rel="external">LVS理论</a></p>
+<h1 id="LVS-搭建"><a href="#LVS-搭建" class="headerlink" title="LVS 搭建"></a>LVS 搭建</h1><p>本机环境：centos</p>
+<pre><code>NAT    模式的集群
+</code></pre><p><img src="http://os3vxur5n.bkt.clouddn.com/LVS/1.png" alt=""></p>
+<p>准备5台机器：1ps-外网测试 2ps-网关 3ps-内网服务    4ps-内网服务 5ps-nfs共享存储</p>
+<p>所有内网主机全部要指网关</p>
+<pre><code>nfs 服务器搭建
+</code></pre><p>创建共享目录： mkdir /test</p>
+<p>修改 nfs 配置文件：    vim /etc/exports</p>
+<p>共享的目录 客户端地址（共享的权限）  /test 66.66.66.0/24(ro,sync 只读访问，同步 )</p>
+<p>开启 nfs 服务:    service nfs start </p>
+<p>查看共享的 nfs 服务器：    showmount -e 本机 IP 地址</p>
+<pre><code>第一台网站服务器
+</code></pre><p>yum -y install httpd 安装 apache</p>
+<p>showmount -e 66.66.66.40 （ nfs 服务器地址） 查看是否有 nfs 共享目录</p>
+<p>mount 66.66.66.40:/share （共享目录） /var/www/html （挂载点） 将 nfs 共享文件挂在到 /var/www/html 上</p>
+<p>service httpd start 启动 apache 服务</p>
+<p>chkconfig httpd on 设置 apache 的开机自启动</p>
+<pre><code>第二台网站服务器
+</code></pre><p>第二台网页服务器为了测试效果不采用 nfs 共享的方式，但在实际工作中通通采用 nfs 共享的方式</p>
+<p>yum -y install httpd 安装 apache</p>
+<p>cd /var/www/html 进入网页存放目录</p>
+<p>vi index.html 创建并编辑网页文件</p>
+<pre><code>网关服务器
+</code></pre><p>modprobe ip_vs 测试是否加载，如果没有得到任何信息，则已经加载</p>
+<p>cat /proc/net/ip_vs 查看版本信息，以检测是否已经开始正常工作</p>
+<p>cd /mnt/cdrom/Packages/ 进入光盘挂载目录</p>
+<p>rpm -ivh ipvsadm-1.26l……… 安装 ipvsadm 管理工具</p>
+<p>vi /etc/sysctl.conf 作为网关服务器，需要开启路由转发功能</p>
+<p>……</p>
+<p>net,ipv4.ip_forward=1</p>
+<p>sysctl -p 刷新内核参数</p>
+<p>iptables -t nat -A POSTROUTING -s 66.66.66.0/24( 内网网段） -o eth0 （外网口网卡名称） -j SNAT –to-source 10.10.10.10  （外网口的网卡地址） 添加防火墙规则</p>
+<p>iptables -t nat -L 查看添加的规则</p>
+<p>ipvsadm -A （添加一个负载调度器） -t 66.66.66.66:80  （集群地址，在 NAT’ 模式下，就等于是外网口地址） -s rr （代表采用的算法， rr 代表轮询） 添加一个调度器规则</p>
+<p>iptables -D -t IP:80 清除调度规则</p>
+<p>ipvsadm -a （集群服务器 ) -t 66.66.66.66:80 （集群地址） -r 66.66.66.20:80 （集群服务器地址） -m （代表调度模式， -m 代表NAT 模式） 添加一个集群服务器信息，一台需要添加一条</p>
+<p>ipvsadm -a -t 66.66.66.66:80 -r 66.66.66.30:80 </p>
+<p>ipvsadm -Ln 查看已设规则</p>
+<p>service ipvsadm save 保存策略</p>
+<p>chkconfig ipvsadm on 设置为开机自启动</p>
+<p>如果没有轮询，检查内网主机默认路由的添加</p>
+<h1 id="DR-模式的集群"><a href="#DR-模式的集群" class="headerlink" title="DR 模式的集群"></a>DR 模式的集群</h1><p><img src="http://os3vxur5n.bkt.clouddn.com/LVS/2.png" alt=""></p>
+<pre><code>准备4台服务器：1PS-网关 2PS-内网服务 3PS-内网服务 4PS-NFS共享存储
+</code></pre><hr>
+<pre><code>网关服务器
+</code></pre><p>安装：yum -y install ipvsadm</p>
+<p>service NetworkManager stop #关闭网卡守护进程</p>
+<p>cd /etc/sysconfig/network-scripts/ #创建虚拟IP</p>
+<p>cp ifcfg-eth0 ifcfg-eth0:0</p>
+<p>vim ifcfg-eth0:0</p>
+<blockquote>
+<p>   DEVICE=eth0:0</p>
+<p>   IPADDR= 虚拟 IP</p>
+<p>   NETMASK=255.255.255.0</p>
+</blockquote>
+<p>ifup eth0:0 #启动网卡</p>
+<p>关闭网卡的重定向功能：vim /etc/sysctl.conf #在尾行添加</p>
+<blockquote>
+<p>   net.ipv4.conf.eth0.send_redirects = 0<br>   net.ipv4.conf.all.send_redirects = 0<br>   net.ipv4.conf.default.send_redirects = 0<br>   net.ipv4.conf.eth0.send_redirects = 0</p>
+</blockquote>
+<p>sysctl -p</p>
+<p>ipvsadm -A （添加一个负载调度器） -t 66.66.66.66:80  （集群地址，在 NAT’ 模式下，就等于是外网口地址） -s rr （代表采用的算法， rr 代表轮询） 添加一个调度器规则</p>
+<p>ipvsadm -a -t  虚拟 IP:80 -r  网站 1:80 -g</p>
+<p>ipvsadm -a -t  虚拟 IP:80 -r  网站 2:80 -g</p>
+<p>ipvsadm -Ln 查看已设规则</p>
+<p>service ipvsadm save 保存策略</p>
+<p>chkconfig ipvsadm on 设置为开机自启动</p>
+<p>如果没有轮询，检查内网主机默认路由的添加</p>
+<pre><code>第一台网站服务器
+</code></pre><p>service NetworkManager stop</p>
+<p>cd /etc/sysconfig/network-scripts/</p>
+<p>cp ifcfg-lo ifcfg-lo:0</p>
+<p>DEVICE=lo:0</p>
+<p>IPADDR= 虚拟 IP</p>
+<p>NETMASK=255.255.255.255</p>
+<p>优化网卡：vim /etc/sysctl.conf #在尾行添加</p>
+<blockquote>
+<p>   net.ipv4.conf.all.arp_ignore = 1<br>   net.ipv4.conf.all.arp_announce = 2<br>   net.ipv4.conf.default.arp_ignore = 1<br>   net.ipv4.conf.default.arp_announce = 2<br>   net.ipv4.conf.lo.arp_ignore = 1<br>   net.ipv4.conf.lo.arp_announce = 2</p>
+</blockquote>
+<p>sysctl -p</p>
+<p>ifup lo:0</p>
+<p>route add -host  虚拟 IP dev lo:0</p>
+<p>mount -t nfs  共享存储 : 共享目录 /var/www/html</p>
+<p>service httpd start</p>
+<pre><code>第二台网站服务器
+</code></pre><p>service NetworkManager stop</p>
+<p>cd /etc/sysconfig/network-scripts/</p>
+<p>cp ifcfg-lo ifcfg-lo:0</p>
+<p>vi ifcfg-lo ： 0</p>
+<p>DEVICE=lo:0</p>
+<p>IPADDR= 虚拟 IP</p>
+<p>NETMASK=255.255.255.255</p>
+<p>vim /etc/sysctl.conf</p>
+<blockquote>
+<p>   net.ipv4.conf.all.arp_ignore = 1<br>   net.ipv4.conf.all.arp_announce = 2<br>   net.ipv4.conf.default.arp_ignore = 1<br>   net.ipv4.conf.default.arp_announce = 2<br>   net.ipv4.conf.lo.arp_ignore = 1<br>   net.ipv4.conf.lo.arp_announce = 2</p>
+</blockquote>
+<p>sysctl -p</p>
+<p>route add -host  虚拟 IP dev lo:0</p>
+<p>vim /var/www/html/index.html</p>
+<p>service httpd start</p>
+<pre><code>共享存储
+</code></pre><p>vim /etc/exports</p>
+<p>/share 内网网段 (ro,sync)</p>
+<p>servie rpcbind restart</p>
+<p>service nfs restart</p>
+<p>LVS的DR模式后台真实服务器出现问题，无法进行自动剔除，就会造成两次访问，一次正常，一次访问失败</p>
+<pre><code>使用脚本实现后台服务器故障自动剔除
+</code></pre><p><a href="http://os3vxur5n.bkt.clouddn.com/LVS/LVS%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5.sh" target="_blank" rel="external">LVS健康检查脚本</a></p>
+<h1 id="搭建keepalived负载均衡"><a href="#搭建keepalived负载均衡" class="headerlink" title="搭建keepalived负载均衡"></a>搭建keepalived负载均衡</h1><p><img src="http://os3vxur5n.bkt.clouddn.com/LVS/3.png" alt=""></p>
+<pre><code>在原有的DR集群的基础之上的实验
+</code></pre><p>安装：yum -y install kernel-devel openssl-devel popt-devel gcc* lrzsz</p>
+<hr>
+<p>tar -zxf keepalived</p>
+<p>cd keepalived</p>
+<p>安装：./configure –prefix=/ –with-kernel-dir=/usr/src/kernels/2.6….  &amp;&amp; make &amp;&amp; make install </p>
+<p>配置：vim /etc/keepalived/keepalived.conf</p>
+<blockquote>
+<p>   global_defs {</p>
+<p>   router_id R1 命名主机名</p>
+<p>   }</p>
+<p>   vrrp_instance VI–1 {</p>
+<p>   state MASTER 设置服务类型主 / 从（ MASTER/SLAVE ）</p>
+<p>   interface eth0 指定那块网卡用来监 听</p>
+<p>   virtual_router_id 66 设置组号，如果是一组就是相同的 ID 号，一个主里面只能有一个主服务器和多个从服务器</p>
+<p>   priority 100 服务器优先级，主服务器优先级高</p>
+<p>   advert_int 1 心跳时间，检测对方存活</p>
+<p>   authenticetion { 存活验证密码</p>
+<p>   auth_type PASS</p>
+<p>   auth_pass 1111</p>
+<p>   }</p>
+<p>   virtual_ipaddress {</p>
+<p>   66.66.66.66 设置集群地址</p>
+<p>   }</p>
+<p>   }</p>
+<p>   virtual_server 66.66.66.66 80 { 设置集群地址 以及端口号</p>
+<p>   delay_loop 6 // 健康检查间隔</p>
+<p>   lb_algorr // 使用轮询调度算法</p>
+<p>   lb_kind DR //DR 模式的群集</p>
+<p>   protocol TCP // 使用的协议</p>
+<p>   real_server 66.66.66.20 80 { 管理的网站节点以及使用端口</p>
+<p>   weight 1 权重，优先级 在原文件基础上删除修改</p>
+<p>   TCP_CHECK { // 状态检查方式</p>
+<p>   connect_port 80 // 检查的目标端口</p>
+<p>   connect_timeout 3 // 连接超时（秒）</p>
+<p>   nb_get_retry 3 // 重试次数</p>
+<p>   delay_before_retry 4 // 重试间隔（秒）</p>
+<p>   }</p>
+<p>   real_server 66.66.66.30 80 { 管理的第二个网站节点以及使用端口</p>
+<p>   weight 1 权重，优先级 在原文件基础上删除修改</p>
+<p>   TCP_CHECK { // 状态检查方式</p>
+<p>   connect_port 80 // 检查的目标端口</p>
+<p>   connect_timeout 3 // 连接超时（秒）</p>
+<p>   nb_get_retry 3 // 重试次数</p>
+<p>   delay_before_retry 4 // 重试间隔（秒）</p>
+<p>   }</p>
+<p>   }</p>
+<p>   }</p>
+</blockquote>
+<p>多余删除</p>
+<p>启动服务： service keepalived restart</p>
+<p>scp keepalived.conf root@66.66.66.50:/etc/keepalived/</p>
+<pre><code>备用调度器
+</code></pre><p>yum -y install kernel-devel openssl-devel popt-devel gcc* lrzsz</p>
+<hr>
+<p>tar -zxf keepalived…..</p>
+<p>cd    keepalived</p>
+<p>./configure –prefix=/ –with-kernel-dir=/usr/src/kernels/2.6… &amp;&amp; make &amp;&amp; make install </p>
+<p>配置：vim /etc/keepalived/keepalived.conf</p>
+<blockquote>
+<p>   global_defs {</p>
+<p>   router_id R2 命名主机名</p>
+<p>   }</p>
+<p>   vrrp_instance VI–1 {</p>
+<p>   state SLAVE 设置服务类型主 / 从（ MASTER/SLAVE ）</p>
+<p>   interface eth0 指定那块网卡用来监 听</p>
+<p>   virtual_router_id 66 设置组号，如果是一组就是相同的 ID 号，一个主里面只能有一个主服务器和多个从服务器</p>
+<p>   priority 100 服务器优先级，主服务器优先级高</p>
+<p>   advert_int 1 心跳时间，检测对方存活</p>
+<p>   authenticetion { 存活验证密码</p>
+<p>   auth_type PASS</p>
+<p>   auth_pass 1111</p>
+<p>   }</p>
+<p>   virtual_ipaddress {</p>
+<p>   66.66.66.66 设置集群地址</p>
+<p>   }</p>
+<p>   }</p>
+<p>   virtual_server 66.66.66.66 80 { 设置集群地址 以及端口号</p>
+<p>   delay_loop 6 // 健康检查间隔</p>
+<p>   lb_algorr // 使用轮询调度算法</p>
+<p>   lb_kind DR //DR 模式的群集</p>
+<p>   protocol TCP // 使用的协议</p>
+<p>   real_server 66.66.66.20 80 { 管理的网站节点以及使用端口</p>
+<p>   weight 1 权重，优先级 在原文件基础上删除修改</p>
+<p>   TCP_CHECK { // 状态检查方式</p>
+<p>   connect_port 80 // 检查的目标端口</p>
+<p>   connect_timeout 3 // 连接超时（秒）</p>
+<p>   nb_get_retry 3 // 重试次数</p>
+<p>   delay_before_retry 4 // 重试间隔（秒）</p>
+<p>   }</p>
+<p>   real_server 66.66.66.30 80 { 管理的第二个网站节点以及使用端口</p>
+<p>   weight 1 权重，优先级 在原文件基础上删除修改</p>
+<p>   TCP_CHECK { // 状态检查方式</p>
+<p>   connect_port 80 // 检查的目标端口</p>
+<p>   connect_timeout 3 // 连接超时（秒）</p>
+<p>   nb_get_retry 3 // 重试次数</p>
+<p>   delay_before_retry 4 // 重试间隔（秒）</p>
+<p>   }</p>
+<p>   }</p>
+<p>   }</p>
+</blockquote>
+<p>多余删除</p>
+<p>启动服务： service keepalived restart</p>
+<p>service NetworkManager stop 启动虚拟借口，必须关闭此服务</p>
+<p>cd /etc/sysconfig/network-scripts/</p>
+<p>cp ifcfg-eth0 ifcfg-eth0:0</p>
+<p>vim ifcfg-eth0:0 配置虚拟借口</p>
+<p>DEVICE=eth0:0</p>
+<p>IPADDR= 虚拟 IP</p>
+<p>NETMASK=255.255.255.0</p>
+<p>ifup eth0:0 启动虚拟网卡</p>
+<p>vim /etc/sysconfig/network-script/ifup-eth 如果 报错修改文件 257附近</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/LVS/4.png" alt=""></p>
+<p>vim /etc/sysctl.conf 修改内核参数。防止相同网络地址广播冲突，如果有多快网卡需要设置多行 net.ipv4.conf.eth0.send_redirects = 0</p>
+<p>net.ipv4.conf.all.send_redirects = 0</p>
+<p>net.ipv4.conf.default.send_redirects = 0</p>
+<p>net.ipv4.conf.eth0.send_redirects = 0</p>
+<p>sysctl -p 刷新内核参数</p>
+<p>modprobe ip_vs 查看内核是否加载，无法应则以加载</p>
+<p>cat /proc/net/ip_vs 参看版本，确认知否正确加载</p>
+<p>cd /mnt/cdrom/Packages/ 进入光盘挂载目录</p>
+<p>rpm -ivh ipvsadm-1.26l……… 安装 ipvsadm 管理工具</p>
+<p>ipvsadm -v</p>
+<p>ipvsadm -A -t  虚拟 IP:80 -s rr</p>
+<p>ipvsadm -Ln 查看设置的 ipvsadm</p>
+<p>如果没有子项，那么手动添加</p>
+<p>ipvsadm -a -t  虚拟 IP:80 -r  网站 1:80 -g</p>
+<p>ipvsadm -a -t  虚拟 IP:80 -r  网站 2:80 -g</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#LVS-搭建"><span class="toc-text">LVS 搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DR-模式的集群"><span class="toc-text">DR 模式的集群</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#搭建keepalived负载均衡"><span class="toc-text">搭建keepalived负载均衡</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+
+  
+
+  
+    <a href="/2017/07/10/RHCS/" class="next">下一篇 RHCS &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by You Th using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/ZJcheng">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://weibo.com/u/6107250655">
+        
+          <i class="icon iconfont weibo">&#xe602;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+  <script>
+if(isTriggerAnalytics) {
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f15832fa2beb10725843b2702cf82399";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+}
+</script>
+
+
+
+  <script>
+if(isTriggerAnalytics) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101736855-1', 'auto');
+  ga('send', 'pageview');
+}
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/1c43953b79ab5bf0.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/e33029ff65cf5e2d.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/dcda941b49b24c38.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/883c8771706e9f47.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/58ade17c03935b32.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b1f7b1d418d0f8ba.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b47ba41371028de2.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/4e375f9893109b4f.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/13e3984276c67ab8.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/ca1f9761784b661e.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/20cafbbf15da2467.jpg');
+    
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["slideLeft2","slideRight2","flash2"],"timer":true,"delay":5000,"shuffle":true,"count":28};
+var unsplashConfig = {"gravity":"north"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+  turnoffBackgroundImage = true;
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
+

@@ -1,0 +1,618 @@
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="author" content="You Th">
+  
+  
+  
+  
+    <meta name="description" content="RHCS恶心的服务
+RHCS 搭建本机环境：centos-6
+配置各节点名称    
+
+toot:    vim /etc/hosts
+
+
+   66.66.66.10     www.toot.xin    toot   66.66.66.20     www.toot.xin1   toot1   66.66.66.30     www.toot.xin2   toot2   66.66...">
+  
+  <title>RHCS [ 放肆青春 ]</title>
+  
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+  <link rel="stylesheet" href="/css/random.css">
+<link rel="stylesheet" href="/css/vegas.min.css">
+<link rel="stylesheet" href="/css/highlight-railscasts.css">
+<link rel="stylesheet" href="/css/jquery.fancybox.css">
+<link rel="stylesheet" href="/css/iconfont/iconfont.css">
+<link rel="stylesheet" href="/css/jquery.fancybox-thumbs.css">
+<link rel="stylesheet" href="/css/plyr.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
+  
+    <div class="item prev">
+      <a href="/2017/07/10/LVS/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        LVS
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/07/10/iscsi/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        iscsi
+      </div>
+    </div>
+  
+</div>
+<div id="outer-container" class="hide-area">
+<div id="container">
+  <div id="menu-outer" class="slide-down">
+    <div id="menu-inner">
+      <div id="brand">
+        
+        <a onClick="openUserCard()">
+          <img id="avatar" src="/favicon.ico"/>
+          <div id="homelink">放肆青春</div>
+        </a>
+      </div>
+      <div id="menu-list">
+        <ul>
+        
+        
+          
+            <li>
+          
+            <a href="/index.html">首页</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/archives">文章</a>
+            
+          </li>
+        
+          
+            <li>
+          
+            <a href="/简历">简历</a>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div id="show-menu">
+        <button>Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="content-outer">
+    <div id="content-inner">
+      
+      
+  <article id="post">
+    <h1>RHCS</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-09</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-09</span>
+      
+      
+      <span id = "post-title-categories">分类
+      
+      
+        
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
+      
+      
+      <span id = "post-title-tags">
+      标签
+      
+      
+        
+        
+        <a href="/tags/集群/">集群</a>
+      
+      </span>
+      
+    </p>
+    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=351522&auto=0&height=66"></iframe><br></center>
+
+<p><a href="http://ixdba.blog.51cto.com/2895551/589079/http://ixdba.blog.51cto.com/2895551/589079/" target="_blank" rel="external">RHCS恶心的服务</a></p>
+<h1 id="RHCS-搭建"><a href="#RHCS-搭建" class="headerlink" title="RHCS 搭建"></a>RHCS 搭建</h1><p>本机环境：centos-6</p>
+<pre><code>配置各节点名称    
+</code></pre><ul>
+<li>toot:    vim /etc/hosts</li>
+</ul>
+<blockquote>
+<p>   66.66.66.10     www.toot.xin    toot<br>   66.66.66.20     www.toot.xin1   toot1<br>   66.66.66.30     www.toot.xin2   toot2<br>   66.66.66.40     www.toot.xin3   toot3<br><img src="http://os3vxur5n.bkt.clouddn.com/RHCS/1.png" alt=""></p>
+</blockquote>
+<p>scp /etc/hosts root@66.66.66.20:/etc/hosts</p>
+<p>scp /etc/hosts root@66.66.66.30:/etc/hosts</p>
+<p>scp /etc/hosts root@66.66.66.40:/etc/hosts</p>
+<pre><code>配置各节点与跳板机 ssh 互信
+</code></pre><ul>
+<li><p>toot:    ssh-keygen -t rsa</p>
+<ul>
+<li>ssh-copy-id toot1</li>
+<li>ssh-copy-id toot2</li>
+<li>ssh-copy-id toot3</li>
+</ul>
+</li>
+<li><p>toot1:    ssh-keygen -t rsa</p>
+<ul>
+<li>ssh-copy-id toot</li>
+</ul>
+</li>
+<li><p>toot2:    ssh-keygen -t rsa</p>
+<ul>
+<li>ssh-copy-id toot</li>
+</ul>
+</li>
+<li><p>toot3:    ssh-keygen -t rsa</p>
+<ul>
+<li>ssh-copy-id toot</li>
+</ul>
+<p>配置个脚本方便操作</p>
+</li>
+<li><p>toot:    alias ha=’for I in {1..3}; do’ #设置一个别名，因为每次都得用到时</p>
+<p>配置各节点时间同步</p>
+</li>
+<li><p>toot:    vim /etc/ntp.conf</p>
+</li>
+</ul>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/RHCS/2.png" alt=""></p>
+<p>重启服务：service  ntpd restart</p>
+<ul>
+<li><p>toot:    ha ssh toot$I ‘ntpdate 66.66.66.10’; done    #各节点都在时间同步</p>
+<p>安装yum源-关闭防火墙SElinux</p>
+</li>
+<li><p>toot:    ha ssh toot$I ‘wget -O /etc/yum.repos.d/CentOS-Base.repo <a href="http://mirrors.aliyun.com/repo/Centos-6.repo" target="_blank" rel="external">http://mirrors.aliyun.com/repo/Centos-6.repo</a>‘; done</p>
+</li>
+<li><p>toot:    ha ssh toot$I ‘service iptables stop’; done</p>
+<p>iscsi 安装与配置</p>
+</li>
+<li><p>toot:     yum install -y scsi-target-utils</p>
+<ul>
+<li>toot:     vim /etc/tgt/targets.conf</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/RHCS/3.png" alt=""></p>
+<p>启动服务： service tgtd start</p>
+<p>开机自启动： chkconfig tgtd on</p>
+<p>查看配置的 target： tgtadm –lld iscsi –mode target –op show </p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/RHCS/4.png" alt=""></p>
+<pre><code>在各节点上安装 initiator
+</code></pre><ul>
+<li>toot:    ha ssh toot$I ‘yum -y install iscsi-initiator-utils’; done</li>
+</ul>
+<hr>
+<pre><code>配置 initiator
+</code></pre><ul>
+<li><p>toot1:    vim /etc/iscsi/initiatorname.iscsi</p>
+<ul>
+<li>iqn.2017-7.xin.toot.www:toot1</li>
+</ul>
+</li>
+<li><p>toot1:     vim /etc/iscsi/iscsid.conf</p>
+<ul>
+<li>修改下面三项</li>
+<li>node.session.auth.authmethod = CHAP #开启 CHAP 认证</li>
+<li>node.session.auth.username = iscsiuser #配置认证用户名</li>
+<li>node.session.auth.password = iscsiuser #配置认证密码</li>
+</ul>
+</li>
+<li><p>toot2:    vim /etc/iscsi/initiatorname.iscsi</p>
+<ul>
+<li>iqn.2017-7.xin.toot.www:toot2</li>
+</ul>
+</li>
+<li><p>toot2:     vim /etc/iscsi/iscsid.conf</p>
+<ul>
+<li>修改下面三项</li>
+<li>node.session.auth.authmethod = CHAP #开启 CHAP 认证</li>
+<li>node.session.auth.username = iscsiuser #配置认证用户名</li>
+<li>node.session.auth.password = iscsiuser #配置认证密码</li>
+</ul>
+</li>
+<li><p>toot3:    vim /etc/iscsi/initiatorname.iscsi</p>
+<ul>
+<li>iqn.2017-7.xin.toot.www:toot3</li>
+</ul>
+</li>
+<li><p>toot3:     vim /etc/iscsi/iscsid.conf</p>
+<ul>
+<li>修改下面三项</li>
+<li>node.session.auth.authmethod = CHAP #开启 CHAP 认证</li>
+<li>node.session.auth.username = iscsiuser #配置认证用户名</li>
+<li>node.session.auth.password = iscsiuser #配置认证密码</li>
+</ul>
+</li>
+<li><p>toot:    启动服务：ha ssh toot$I ‘service iscsi start’; done</p>
+</li>
+<li><p>toot：    开机自启：ha ssh toot$I ‘chkconfig iscsi on’; done</p>
+</li>
+<li><p>toot:    各节点发现下：ha ssh toot$I ‘iscsiadm -m discovery -t st -p 66.66.66.10’; done</p>
+</li>
+<li><p>toot:    各节点登录一下 target: ha ssh toot$I ‘iscsiadm -m node -T iqn.2017-7.xin.toot.www:RHCS -p 66.66.66.10 -l ‘; done</p>
+</li>
+</ul>
+<pre><code>安装cman 与 rgmanager 集群安装与配置
+</code></pre><ul>
+<li><p>toot:    ha ssh toot$I ‘yum install -y cman rgmanager’; done</p>
+</li>
+<li><p>toot1:    配置集群名称:    ccs_tool create testcluster</p>
+</li>
+<li><p>toot1:    配置 fencing 设备:    ccs_tool addfence meatware fence_manual</p>
+</li>
+<li><p>toot1：    查看：     ccs_tool lsfence</p>
+</li>
+<li><p>toot1：    配置集群节点：    ccs_tool addnode -n 1 -f meatware www.toot.xin1</p>
+<ul>
+<li>ccs_tool addnode -n 2 -f meatware www.toot.xin2</li>
+<li>ccs_tool addnode -n 3 -f meatware www.toot.xin3</li>
+</ul>
+</li>
+<li><p>toot1:    查看集群节点：     ccs_tool lsnode</p>
+</li>
+<li><p>toot1:    同步配置文件到各节点:    scp /etc/cluster/cluster.conf toot2:/etc/cluster/</p>
+</li>
+<li><p>toot1:    同步配置文件到各节点:    scp /etc/cluster/cluster.conf toot3:/etc/cluster/</p>
+</li>
+<li><p>toot1:    启动服务： service cman start</p>
+</li>
+<li><p>toot2:    启动服务： service cman start</p>
+</li>
+<li><p>toot3:    启动服务： service cman start</p>
+</li>
+</ul>
+<pre><code>cLVM 安装与配置
+</code></pre><ul>
+<li><p>toot:    安装: ha ssh toot$I ‘yum install -y lvm2-cluster’; done</p>
+</li>
+<li><p>toot:    启用集群: ha ssh toot$I ‘lvmconf –enable-cluster’; done</p>
+</li>
+<li><p>toot:    查看一下启用的集群: ha ssh toot$I ‘grep “locking_type = 3” /etc/lvm/lvm.conf’; done</p>
+</li>
+<li><p>toot:    启动 cLVM 服务: ha ssh toot$I ‘grep “service clvmd start’; done</p>
+</li>
+<li><p>toot:    设置开机启动:  ha ssh toot$I ‘chkconfig clvmd on’; done</p>
+<ul>
+<li>ha ssh toot$I ‘chkconfig cman on’; done</li>
+<li>ha ssh toot$I ‘chkconfig rgmanager on’; done</li>
+</ul>
+</li>
+</ul>
+<pre><code>在集群节点上创建 lvm
+</code></pre><ul>
+<li><p>toot1:    创建物理卷:     pvcreate /dev/sdb</p>
+</li>
+<li><p>toot1:    创建卷组:    vgcreate clustervg /dev/sdb</p>
+</li>
+<li><p>toot1:    创建逻辑卷:     lvcreate -L 10G -n clusterlv clustervg</p>
+</li>
+<li><p>各节点查看下逻辑卷</p>
+<ul>
+<li>toot1:    lvs</li>
+<li>toot2:    lvs</li>
+<li>toot3:    lvs</li>
+</ul>
+<p>gfs2 安装与配置</p>
+</li>
+<li><p>toot:    安装: ha ssh toot$I ‘yum install -y gfs2-utils’; done</p>
+</li>
+<li><p>toot1:    格式化为集群文件： mkfs.gfs2 -j 2 -p lock_dlm -t testcluster:sharedstorage /dev/clustervg/clusterlv</p>
+</li>
+<li><p>toot1:    创建挂载目录： mkdir /test</p>
+</li>
+<li><p>toot1:    挂载：    mount -t gfs2 /dev/clustervg/clusterlv /test/</p>
+</li>
+<li><p>toot2:    创建挂载目录： mkdir /test</p>
+</li>
+<li><p>toot2:    挂载：    mount -t gfs2 /dev/clustervg/clusterlv /test/</p>
+</li>
+<li><p>toot3:    创建挂载目录： mkdir /test</p>
+</li>
+<li><p>toot3:    挂载：    mount -t gfs2 /dev/clustervg/clusterlv /test/</p>
+<p>添加新节点</p>
+</li>
+</ul>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RHCS-搭建"><span class="toc-text">RHCS 搭建</span></a></li></ol>
+  </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/07/10/LVS/" class="prev">&larr; 上一篇 LVS</a>
+  
+
+  
+
+  
+    <a href="/2017/07/10/iscsi/" class="next">下一篇 iscsi &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
+      
+      
+    </div>
+  </div>
+
+  <div id="bottom-outer">
+    <div id="bottom-inner">
+      Site by You Th using
+      <a href="http://hexo.io">Hexo</a> & <a href="https://github.com/stiekel/hexo-theme-random">Random</a>
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
+
+
+<div id="user-card">
+  <div class="center-field">
+    <img class="avatar" src="/favicon.ico">
+    <p id="description">You Th</p>
+    <ul class="social-icon">
+  
+  
+    <li>
+      <a href="https://github.com/ZJcheng">
+        
+          <i class="icon iconfont github">&#xe606;</i>
+        
+      </a>
+    </li>
+  
+    <li>
+      <a href="http://weibo.com/u/6107250655">
+        
+          <i class="icon iconfont weibo">&#xe602;</i>
+        
+      </a>
+    </li>
+  
+</ul>
+  </div>
+</div>
+
+
+<div id="btn-view">Hide</div>
+
+<script>
+// is trigger analytics / tongji script
+var isIgnoreHost = false;
+
+if(window && window.location && window.location.host) {
+  isIgnoreHost = ["localhost","127.0.0.1"].some(function(address){
+    return 0 === window.location.host.indexOf(address);
+  });
+}
+
+var isTriggerAnalytics = !( true && isIgnoreHost );
+
+</script>
+
+  <script>
+if(isTriggerAnalytics) {
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f15832fa2beb10725843b2702cf82399";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+}
+</script>
+
+
+
+  <script>
+if(isTriggerAnalytics) {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101736855-1', 'auto');
+  ga('send', 'pageview');
+}
+
+</script>
+
+
+
+
+  
+  
+    <script src="/js/jquery-2.2.3.min.js"></script>
+  
+    <script src="/js/vegas.min.js"></script>
+  
+    <script src="/js/random.js"></script>
+  
+    <script src="/js/highlight.pack.js"></script>
+  
+    <script src="/js/jquery.mousewheel.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox.pack.js"></script>
+  
+    <script src="/js/jquery.fancybox-thumbs.js"></script>
+  
+    <script src="/js/plyr.js"></script>
+  
+
+<script>
+
+  // fancybox
+  var backgroundImages = [];
+  
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/1c43953b79ab5bf0.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/e33029ff65cf5e2d.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/dcda941b49b24c38.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/883c8771706e9f47.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/58ade17c03935b32.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b1f7b1d418d0f8ba.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/b47ba41371028de2.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/4e375f9893109b4f.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/13e3984276c67ab8.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/ca1f9761784b661e.jpg');
+    
+      backgroundImages.push('http://i2.kiimg.com/598678/20cafbbf15da2467.jpg');
+    
+  
+  $('#post').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox') || $(this).parent().hasClass('fancybox-thumb')) return;
+      var alt = this.alt || this.title;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'post' + i);
+    });
+  });
+  $(".fancybox").fancybox();
+
+var vegasConfig = {"preload­Image":true,"transition":["slideLeft2","slideRight2","flash2"],"timer":true,"delay":5000,"shuffle":true,"count":28};
+var unsplashConfig = {"gravity":"north"};
+// is show background images
+var turnoffBackgroundImage = false;
+
+
+
+  turnoffBackgroundImage = true;
+
+
+var backgroundColor = "34495E";
+
+$(".fancybox-thumb").fancybox({
+  prevEffect: 'none',
+  nextEffect: 'none',
+  helpers: {
+    title: {
+      type: 'outside'
+    },
+    thumbs: {
+      width: 50,
+      height: 50
+    }
+  }
+});
+
+// show video with plyr
+$(".video-container iframe").each(function(i){
+  var url = $(this).attr('src');
+  var id = url.split('/').pop();
+  var plyrContainer = document.createElement('div');
+  plyrContainer.className = 'plyr';
+  var plyrElement = document.createElement('div');
+  plyrElement.dataset.videoId = id;
+  switch(true) {
+    case url.search('youtube.com') >= 0:
+      plyrElement.dataset.type = 'youtube';
+      break;
+    case url.search('vimeo.com') >= 0:
+      plyrElement.dataset.type = 'vimeo';
+      break;
+    default:
+      return;
+  };
+  plyrContainer.appendChild(plyrElement);
+  $(this).parent().html(plyrContainer);
+});
+plyr.setup('.plyr', {iconUrl: '/css/sprite.svg'});
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
+
