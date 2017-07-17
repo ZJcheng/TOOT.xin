@@ -1,8 +1,6 @@
 
 
 
-  
-
 
 
 
@@ -18,9 +16,17 @@
   
   
   
-    <meta name="description" content="You Th">
+    <meta name="description" content="Tomcat
+Tomcat 搭建本机环境：centos
+安装 gcc  以及 lrzsz
+
+   yum -y install gcc*  安装编译源码包所需的软件   yum -y install lrzsz  安装时候可以通过 xshell  终端进行上传下载的一些操作
+
+安装 JDK:解压 JDK  软件包 tar -zxvf jdk…..tar.gz
+
+mv jdk1.7.0_25 ...">
   
-  <title>标签: 虚拟化 [ 放肆青春 ]</title>
+  <title>Tomcat [ 放肆青春 ]</title>
   
   
     <link rel="shortcut icon" href="/favicon.ico">
@@ -39,6 +45,15 @@
 <body>
 <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
   
+  
+    <div class="item next">
+      <a href="/2017/07/17/cobbler/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        cobbler
+      </div>
+    </div>
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -89,168 +104,137 @@
     <div id="content-inner">
       
       
-  <div id="tag">
-    <h1>虚拟化</h1>
-    
+  <article id="post">
+    <h1>Tomcat</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-16</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-16</span>
+      
+      
+      <span id = "post-title-categories">分类
       
       
         
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
       
       
-    
+      <span id = "post-title-tags">
+      标签
       
       
         
-      
-      
-    
-      
-      
         
-          
-        
+        <a href="/tags/服务/">服务</a>
       
+      </span>
       
-      <div class="post-title-item">
-  
-  <a href="/2017/07/11/Docker/">
-  
-    Docker
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-10</span>
+    </p>
     
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/虚拟化/">虚拟化</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=482988834&auto=0&height=66"></iframe><br></center>
+
+<p><a href="https://zh.wikipedia.org/wiki/Apache_Tomcat" target="_blank" rel="external">Tomcat</a></p>
+<h1 id="Tomcat-搭建"><a href="#Tomcat-搭建" class="headerlink" title="Tomcat 搭建"></a>Tomcat 搭建</h1><p>本机环境：centos</p>
+<p>安装 gcc  以及 lrzsz</p>
+<blockquote>
+<p>   yum -y install gcc*  安装编译源码包所需的软件<br>   yum -y install lrzsz  安装时候可以通过 xshell  终端进行上传下载的一些操作</p>
+<hr>
+<p>安装 JDK:解压 JDK  软件包 tar -zxvf jdk…..tar.gz</p>
+</blockquote>
+<p>mv jdk1.7.0_25  /jdk</p>
+<pre><code>配置 JDK  的环境变量
+</code></pre><p>vim /etc/profile</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/1.png" alt=""></p>
+<p>刷新配置文件：source /etc/profile</p>
+<pre><code>安装 Tomcat
+</code></pre><p>解压 Tomcat  软件包并拷贝到 /usr/local  目录下</p>
+<p>mv apache-tomcat-7.0.42 /usr/local/Tomcat</p>
+<p>配置 Tomcat  的环境变量</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/2.png" alt=""></p>
+<p>source /etc/profile 刷新环境变量使其生效</p>
+<p>启动 tomcat  程序</p>
+<p>chmod 777 /usr/local/Tomcat/bin/*.sh</p>
+<p>tomcat 开启： /usr/local/Tomcat/bin/catalina.sh start</p>
+<p>Tomcat端口默认为8080</p>
+<hr>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/3.png" alt=""></p>
+<p>修改稿端口：vim /usr/local/Tomcat/conf/server.xml</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/4.png" alt=""></p>
+<pre><code>Tomcat 多实例
+</code></pre><p>拷贝原来的Tomcat到另外一个目录，如：tomcat-8090，清除logs目录</p>
+<p>rm -rf /usr/local/Tomcat/logs/</p>
+<p>cp -a /usr/local/Tomcat  /usr/local/Tomcat8090</p>
+<p>修改Tomcat中的/conf/server.xml文件，把shutdown和Connector端口修改成另外的数值，如8006/8090</p>
+<p>vim /usr/local/Tomcat/conf/server.xml</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/5.png" alt=""></p>
+<p>修改startup.sh和shutdown.sh文件，在第一行加入：export CATALINA_HOME=/tomcat路径</p>
+<p>vim shutdown.sh<br><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/6.png" alt=""></p>
+<p>vim startup.sh</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/7.png" alt=""></p>
+<p>另一个实例</p>
+<p>vim /usr/local/Tomcat8090/conf/server.xml</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/8.png" alt=""></p>
+<p>vim /usr/local/Tomcat8090/bin/startup.sh</p>
+<p>vim /usr/local/Tomcat8090/bin/shutdown.sh</p>
+<p>如果多个实例就添加多个实例。</p>
+<p>启动tomcat</p>
+<p>/usr/local/Tomcat/bin/catalina.sh start</p>
+<p>/usr/local/Tomcat8090/bin/catalina.sh start</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/9.png" alt=""></p>
+<pre><code>部署 war  包
+</code></pre><p>部署 Java  的 WAR  包</p>
+<p>在 /usr/local/tomcat/conf/server.xdl  配置文件中的 server  区域中添加</p>
+<context path="" docbase="war 包名称 " debug="0" privileged="true">
+
+<p>vim /usr/local/Tomcat/conf/server.xml</p>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Tomcat/10.png" alt=""></p>
+<p>将 war包  拷入到 /usr/local/tomcat/webapps 目录下，并删除 ROOT  目录</p>
+<p>重启服务</p>
+</context>
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tomcat-搭建"><span class="toc-text">Tomcat 搭建</span></a></li></ol>
   </div>
+</div>
+
+  
+<nav id="pagination">
+  
 
   
 
+  
+    <a href="/2017/07/17/cobbler/" class="next">下一篇 cobbler &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
       
       
     </div>
@@ -267,6 +251,12 @@
 </div>
 
 </div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
 
 
 <div id="user-card">
@@ -410,6 +400,8 @@ var unsplashConfig = {"gravity":"north"};
 var turnoffBackgroundImage = false;
 
 
+
+  turnoffBackgroundImage = true;
 
 
 var backgroundColor = "34495E";

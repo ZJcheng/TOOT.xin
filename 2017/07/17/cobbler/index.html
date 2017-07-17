@@ -1,8 +1,6 @@
 
 
 
-  
-
 
 
 
@@ -18,9 +16,14 @@
   
   
   
-    <meta name="description" content="You Th">
+    <meta name="description" content="cobbler 搭建cobbler 简介
+Cobbler是一款自动化操作系统安装的实现，与PXE安装系统的区别就是可以同时部署多个版本的系统，而PXE只能选择一种系统
+本机环境：centos
+安装yum源：yum install -y epel-release
+安装：yum install -y cobbler cobbler-web pykickstart debmirror
+启动服务：s...">
   
-  <title>标签: 虚拟化 [ 放肆青春 ]</title>
+  <title>cobbler [ 放肆青春 ]</title>
   
   
     <link rel="shortcut icon" href="/favicon.ico">
@@ -39,6 +42,24 @@
 <body>
 <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="side-navigate hide-area">
   
+    <div class="item prev">
+      <a href="/2017/07/17/Tomcat/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Tomcat
+      </div>
+    </div>
+  
+  
+    <div class="item next">
+      <a href="/2017/07/11/Docker/">
+        <div class="item-icon"></div>
+      </a>
+      <div class="item-title">
+        Docker
+      </div>
+    </div>
   
 </div>
 <div id="outer-container" class="hide-area">
@@ -89,168 +110,140 @@
     <div id="content-inner">
       
       
-  <div id="tag">
-    <h1>虚拟化</h1>
-    
+  <article id="post">
+    <h1>cobbler</h1>
+    <p class="page-title-sub">
+      <span id = "post-title-date">撰写于 2017-07-16</span>
+      
+        <span id = "post-title-updated">修改于 2017-07-17</span>
+      
+      
+      <span id = "post-title-categories">分类
       
       
         
+        
+        <a href="/categories/linux/">linux</a>
+      
+      </span>
       
       
-    
+      <span id = "post-title-tags">
+      标签
       
       
         
-      
-      
-    
-      
-      
         
-          
-        
+        <a href="/tags/集群/">集群</a>
       
+      </span>
       
-      <div class="post-title-item">
-  
-  <a href="/2017/07/11/Docker/">
-  
-    Docker
-  
-  </a>
-  <p class="page-title-sub">
-    <span id = "post-title-date">7-10</span>
+    </p>
     
-    <span id = "post-title-categories">分类
-    
-    
-      
-      
-      <a href="/categories/linux/">linux</a>
-    
-    </span>
-    
-    
-    <span id = "post-title-tags">
-    标签
-    
-    
-      
-      
-      <a href="/tags/虚拟化/">虚拟化</a>
-    
-    </span>
-    
-    
-      <br>
-      
-      
-    
-  </p>
-  
-</div>
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
-      
-      
-        
-      
-      
-    
+    <center><br><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=450055960&auto=0&height=66"></iframe><br></center>
+
+
+
+
+<h1 id="cobbler-搭建"><a href="#cobbler-搭建" class="headerlink" title="cobbler 搭建"></a>cobbler 搭建</h1><pre><code>cobbler 简介
+</code></pre><p>Cobbler是一款自动化操作系统安装的实现，与PXE安装系统的区别就是可以同时部署多个版本的系统，而PXE只能选择一种系统</p>
+<p>本机环境：centos</p>
+<p>安装yum源：yum install -y epel-release</p>
+<p>安装：yum install -y cobbler cobbler-web pykickstart debmirror</p>
+<p>启动服务：systemctl restart httpd</p>
+<p>启动：systemctl restart cobblerd</p>
+<p>查看端口：netstat -an | grep 25151</p>
+<p>配置：vim /etc/cobbler/settings</p>
+<p>server: 123.123.1.110 </p>
+<p>next_server: 123.123.1.110    #TFTP服务器的IP地址</p>
+<p>修复:cobbler get-loaders</p>
+<p>启动：systemctl enable rsyncd</p>
+<p>配置：vim /etc/debmirror.conf</p>
+<p>取消限定机器类型</p>
+<p>#@dists=”sid”;</p>
+<p>#@arches=”i386”;</p>
+<p>生成密码：openssl passwd -1 -salt $(openssl rand -hex 4)</p>
+<p>编辑cobbler配置文件，将生成的密码，将以下密码进行替换</p>
+<p>vim /etc/cobbler/settings</p>
+<p>:101 default_password_crypted: “$1$e4ac60cf$yPrwF3.hfy.Dff0EQ3vqW.”</p>
+<p>yum install fence-agents</p>
+<p>配置tftp：vim  /etc/xinetd.d/tftp</p>
+<p>disabled改为no</p>
+<p>disable                 = no</p>
+<p>启动服务：systemctl start tftp</p>
+<p>重启服务：systemctl restart cobblerd</p>
+<p>cobbler sync</p>
+<p>cobbler check</p>
+<p>yum install -y dhcp</p>
+<p>vim /etc/dhcp/dhcpd.conf</p>
+<blockquote>
+<p>   option domain-name “www.toot.xin”;<br>   option domain-name-servers 114.114.114.114,8.8.8.8;<br>   default-lease-time 43200;<br>   max-lease-time 86400;<br>   log-facility local7;<br>   subnet 123.123.1.0 netmask 255.255.255.0 {<br>   range 123.123.1.100 123.123.1.240;<br>   option routers 123.123.1.2;<br>   }<br>   next-server 123.123.1.110;<br>   filename=”pxelinux.0”;</p>
+</blockquote>
+<p><img src="http://os3vxur5n.bkt.clouddn.com/Cobbler/1.png" alt=""></p>
+<p>systemctl restart dhcpd</p>
+<p>systemctl enable tftp</p>
+<p>systemctl enable dhcpd</p>
+<p>systemctl start fttp</p>
+<p>systemctl restart cobblerd</p>
+<p>systemctl enable rsyncd</p>
+<p>systemctl restart rsyncd</p>
+<p>挂载镜像：mount /dev/cdrom /mnt/</p>
+<p>–name后添加名字,自己定义的:</p>
+<p>cobbler import –name=”centos-x86_64” –path=/mnt/</p>
+<p>可以通过访问：<a href="http://IP/cobbler/" target="_blank" rel="external">http://IP/cobbler/</a> 看到文件列表</p>
+<p>查看镜像：cobbler distro list</p>
+<p>yum   -y    install    system-config-kickstart</p>
+<p>生成cfg文件：system-config-kickstart(图形化)</p>
+<p>cp ks.cfg /var/lib/cobbler/kickstarts/</p>
+<p>cobbler profile add –name=centos-x86_64-basic –distro=centos-x86_64 –kickstart=/var/lib/cobbler/kickstarts/sk.cfg</p>
+<p>查看：cobbler profile list</p>
+<p>cobbler sync</p>
+<p>卸载：cobbler profile remove –name=centos-x86_64</p>
+<p>卸载：cobbler distro remove –name=centos-x86_64</p>
+
+  </article>
+  <div class="random-toc-area">
+  <button class="btn-hide-toc btn-hide-toc-show" style="display: none" onclick="TOCToggle()">显示目录</button>
+  <button class="btn-hide-toc btn-hide-toc-hide" onclick="TOCToggle()">隐藏目录</button>
+  <div class="random-toc">
+    <h2>目录</h2>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cobbler-搭建"><span class="toc-text">cobbler 搭建</span></a></li></ol>
   </div>
+</div>
+
+  
+<nav id="pagination">
+  
+    <a href="/2017/07/17/Tomcat/" class="prev">&larr; 上一篇 Tomcat</a>
+  
 
   
 
+  
+    <a href="/2017/07/11/Docker/" class="next">下一篇 Docker &rarr;</a>
+  
+</nav>
+
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_tools_1"></a>
+	<a class="jiathis_button_tools_2"></a>
+	<a class="jiathis_button_tools_3"></a>
+	<a class="jiathis_button_tools_4"></a>
+	<a href="http://www.jiathis.com/share?uid=2137504" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2137504" charset="utf-8"></script>
+
+<!-- JiaThis Button END -->
+
+
+      
+      <div id="uyan_frame"></div>
       
       
     </div>
@@ -267,6 +260,12 @@
 </div>
 
 </div>
+
+
+  <!-- UY BEGIN -->
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137504"></script>
+<!-- UY END -->
+
 
 
 <div id="user-card">
@@ -410,6 +409,8 @@ var unsplashConfig = {"gravity":"north"};
 var turnoffBackgroundImage = false;
 
 
+
+  turnoffBackgroundImage = true;
 
 
 var backgroundColor = "34495E";
